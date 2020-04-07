@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{0f83265e-f0f7-4e04-b723-f64ec0e37a45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TMX">
+      <UniqueIdentifier>{4ed577c0-3d67-4fc6-838e-4b2a0d270dc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{86f93a92-cdeb-4393-a084-a173143acef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TMX2">
+      <UniqueIdentifier>{4af800f0-fb1b-4028-8942-a067bf34138b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLib\TinyXML\tinyxml.cpp">
+      <Filter>TMX</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLib\TinyXML\tinyxmlerror.cpp">
+      <Filter>TMX</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLib\TinyXML\tinyxmlparser.cpp">
+      <Filter>TMX</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLib\TinyXML\tinystr.cpp">
+      <Filter>TMX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Anim.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Level.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Explover.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLib\ImGui\imgui_draw.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLib\ImGui\imgui_widgets.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLib\ImGui\imgui-SFML.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLib\ImGui\imgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLib\ImGui\imgui_demo.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TmxLevel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceLib\TinyXML2\tinyxml2.cpp">
+      <Filter>TMX2</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SourceLib\TinyXML\tinyxml.h">
+      <Filter>TMX</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceLib\TinyXML\tinystr.h">
+      <Filter>TMX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Anim.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Level.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Explover.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TmxLevel.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceLib\TinyXML2\tinyxml2.h">
+      <Filter>TMX2</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,4 @@
+<Animation>
+    <Anim NameAM="Hero" Name="Stay" File="1.Data/Animation/HS" Frames="1" Speed="1090" />
+    <Anim NameAM="Hero" Name="Walk" File="1.Data/Animation/H" Frames="8" Speed="2650" />
+</Animation>

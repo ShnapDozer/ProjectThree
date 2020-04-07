@@ -1,0 +1,39 @@
+﻿  Source.cpp
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\src\Level.h(75,21): warning C4244: =: преобразование "int" в "T", возможна потеря данных
+          with
+          [
+              T=float
+          ]
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\src\Level.h(79,20): warning C4244: =: преобразование "int" в "T", возможна потеря данных
+          with
+          [
+              T=float
+          ]
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\src\Level.h(83,22): warning C4244: =: преобразование "int" в "T", возможна потеря данных
+          with
+          [
+              T=float
+          ]
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\src\Level.h(87,23): warning C4244: =: преобразование "int" в "T", возможна потеря данных
+          with
+          [
+              T=float
+          ]
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\src\Level.h(112,21): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(72,20): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(82,20): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(96,20): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(156,16): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(183,27): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(184,27): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(221,53): warning C4305: аргумент: усечение из "double" в "float"
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(225,53): warning C4305: аргумент: усечение из "double" в "float"
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(229,53): warning C4305: аргумент: усечение из "double" в "float"
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(233,53): warning C4305: аргумент: усечение из "double" в "float"
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(254,14): warning C4244: инициализация: преобразование "sf::Int64" в "float", возможна потеря данных
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(271,22): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(272,24): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(276,59): warning C4305: аргумент: усечение из "double" в "float"
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(446,21): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\ProjectThree\Source.cpp(459,21): warning C4018: <: несоответствие типов со знаком и без знака
+  ProjectThree.vcxproj -> C:\Users\ReWoodPC\Desktop\ProjectThree\ProjectThree\Debug\ProjectThree.exe
