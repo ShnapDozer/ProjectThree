@@ -12,6 +12,8 @@ Animation::Animation()
 	Frames = 0;
 }
 
+
+
 Animation::Animation(std::string file, float speed, int frames)
 {
 	Speed = speed; 
@@ -76,7 +78,7 @@ void AnimManager::create(std::string name, std::string file, float speed, int fr
 	if (loading) { AnimList[name].Load(); }
 }
 
-void AnimManager::loadAnim(std::vector<std::string>NamesAnim)
+void AnimManager::loadAnim(std::vector<std::string>NameAnim)
 {
 
 }

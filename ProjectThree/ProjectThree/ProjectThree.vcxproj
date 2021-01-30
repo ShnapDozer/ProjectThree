@@ -174,7 +174,10 @@
     <ClInclude Include="SourceLib\TinyXML\tinyxml.h" />
     <ClInclude Include="src\Anim.h" />
     <ClInclude Include="src\Explover.h" />
+    <ClInclude Include="src\Hero.h" />
     <ClInclude Include="src\Level.h" />
+    <ClInclude Include="src\Rand.h" />
+    <ClInclude Include="src\Test.h" />
     <ClInclude Include="src\TmxLevel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

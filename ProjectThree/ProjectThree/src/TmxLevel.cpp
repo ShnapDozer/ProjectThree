@@ -114,6 +114,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
     // Map element example:
     //   <map version="1.0" orientation="orthogonal"
     //    width="10" height="10" tilewidth="34" tileheight="34">
+    m_orientation = std::string(map->Attribute("orientation"));
     m_width = std::stoi(map->Attribute("width"));
     m_height = std::stoi(map->Attribute("height"));
     m_tileWidth = std::stoi(map->Attribute("tilewidth"));
@@ -215,10 +216,26 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
             if (subRectToUse >= 0)
             {
                 sf::Sprite sprite;
-                sprite.setTexture(m_tilesetImage);
-                sprite.setTextureRect(subRects[subRectToUse]);
-                sprite.setPosition(static_cast<float>(x * m_tileWidth), static_cast<float>(y * m_tileHeight));
-                sprite.setColor(sf::Color(255, 255, 255, layer.opacity));
+                float cartX = static_cast<float>(x * m_tileWidth);
+                float cartY = static_cast<float>(y * m_tileHeight);
+
+                if (m_orientation == "orthogonal")
+                {
+                    sprite.setTexture(m_tilesetImage);
+                    sprite.setTextureRect(subRects[subRectToUse]);
+                    sprite.setPosition(cartX, cartY);
+                    sprite.setColor(sf::Color(255, 255, 255, layer.opacity));
+                }
+                else if (m_orientation == "isometric")
+                {
+                    float isoX = (cartX / 2) - cartY;
+                    float isoY = ((cartX / 2) + cartY) / 2;
+                    sprite.setTexture(m_tilesetImage);
+                    sprite.setTextureRect(subRects[subRectToUse]);
+                    sprite.setPosition(isoX, isoY);
+                    sprite.setColor(sf::Color(255, 255, 255, layer.opacity));
+                }
+                else  std::cout << "Bad map. Orientation is not found";
 
                 layer.tiles.push_back(sprite);
             }
@@ -385,19 +402,22 @@ sf::Vector2f TmxLevel::GetTilemapSize() const
     return sf::Vector2f(GetTilemapWidth(), GetTilemapHeight());
 }
 
-void TmxLevel::Draw(sf::RenderTarget &target) const
+void TmxLevel::Draw(sf::RenderTarget &target, sf::Vector2f MapPos) const
 {
-    const sf::FloatRect viewportRect = target.getView().getViewport();
+    float Targ_x = target.getView().getCenter().x - target.getView().getSize().x / 2;
+    float Targ_y = target.getView().getCenter().y - target.getView().getSize().y / 2;
+    const sf::FloatRect viewportRect(Targ_x, Targ_y, target.getView().getSize().x, target.getView().getSize().y);
 
-    // Draw all tiles (and don't draw objects)
-    for (const auto &layer : m_layers)
-    {
-        for (const auto &tile : layer.tiles)
+        for (const auto& layer : m_layers)
         {
-            if (viewportRect.intersects(tile.getLocalBounds()))
+            for (const auto& tile : layer.tiles)
             {
-                target.draw(tile);
+               
+                if (viewportRect.intersects(tile.getGlobalBounds()))
+                {
+                    target.draw(tile);
+                }
             }
-        }
-    }
+        }  
 }
+

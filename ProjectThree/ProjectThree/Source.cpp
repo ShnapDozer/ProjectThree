@@ -6,6 +6,7 @@
 #include <SFML/Audio.hpp>
 
 #include <iostream>
+#include <ctime>
 #include <String>
 #include <vector>
 #include <Windows.h>
@@ -14,10 +15,15 @@
 #include "imgui.h"
 #include "imgui-sfml.h"
 
-#include "src/Anim.h"       // +/-Done!
+#include "src/Anim.h" // +/-Done!
+#include "src/Test.h"
+#include "src/Hero.h"
+#include "src/Rand.h"
 #include "src/Level.h"     // Jopa!
 #include "src/TMXLevel.h"
 #include "src/Explover.h" // +/-Done!
+
+
 
 
 
@@ -67,11 +73,11 @@ std::vector <std::string> MapToString(std::map <std::string, T> a)
 	return swag;
 }
 
-bool checNameAnim(std::vector <AnimManager> a, std::string name)
+bool checNameAnim(std::vector <std::string> a, std::string name)
 {
 	for (int i = 0; i < a.size(); i++)
 	{
-		if (a[i].Name == name)return true;
+		if (a[i] == name)return true;
 	}
 	return false;
 }
@@ -174,6 +180,15 @@ void Read(std::vector <AnimManager>& Anim_Manager, std::string WayToFile = "Auto
 	}
 }
 
+void PrintState(std::map<std::string, float> a)
+{
+	for (auto it = a.begin(); it != a.end(); ++it) 
+	{
+		ImGui::Value(it->first.c_str(), it->second);
+	}
+}
+
+std::map <std::string, AnimManager*> Entity::Members;
 
 int main()
 {
@@ -188,10 +203,9 @@ int main()
 	Ex Levels("\\Data\\Levels\\*", "Data/Levels/");
 
 	//Window&View:
-	sf::RenderWindow window(sf::VideoMode(Wx, Wy), "ProjectTwo");
+	sf::RenderWindow window(sf::VideoMode(Wx, Wy), "ProjectThree");
 	window.setVerticalSyncEnabled(true);
 	window.setKeyRepeatEnabled(false);
-	window.setFramerateLimit(60);
 	ImGui::SFML::Init(window);
 
 	sf::View view;
@@ -199,27 +213,47 @@ int main()
 
 	//All:
 
-	std::vector <AnimManager> ALL_Anim_Manager;
-	std::vector <AnimManager> USING_Anim_Manager;
+	//std::vector <AnimManager> ALL_Anim_Manager;
+	//std::vector <AnimManager> USING_Anim_Manager;
+	std::map <std::string, std::string> ALL_TMX_Level;
 
 	//std::vector <Level> ALL_Level;
 	//std::vector <Object> Load_Level;
 
-	std::map <std::string, std::string> ALL_TMX_Level;
+	//TmxLevel MainLevel;
+	//MainLevel.LoadFromFile("Data/Levels/test/01.tmx"); 
+	
+	TmxLevel IsometricLevel;
+	IsometricLevel.LoadFromFile("Data/Levels/Test isometric/01.tmx");
 
-	TmxLevel MainLevel;
-	MainLevel.LoadFromFile("res/platformer.tmx");
+	randMap Map;
 
+	//icon:
+	sf::Image icon;
+	icon.loadFromFile("Data/icon.png");
+    window.setIcon(32, 32, icon.getPixelsPtr());
+	
 
 	//Support:
 
 	bool TmxLev                = true;
 	bool LoadTmxLev            = false;
+	bool WindowFocus             = true;
 	int SelectLev = 0;
 
-	AnimManager A("Test");
-	A.create("Walk", "Data/Animation/H", 0.007, 8, true);
-	ALL_Anim_Manager.push_back(A);
+	srand(time(NULL));
+
+	
+
+	Hero Hero;
+	Hero.AddAnim("Walk", "Data/Animation/H", 0.007, 8, true);
+	
+
+
+	//Debug values:
+	int Rad = 16;
+	int P = 32;
+
 
 	//ImGui:
 	bool Main;
@@ -243,6 +277,12 @@ int main()
 		clock.restart();
 		time = time / 800;
 
+		sf::RenderTarget& target = window;
+
+		//Mouse
+		sf::Vector2i locPos = sf::Mouse::getPosition(window);
+		sf::Vector2f MapPos = window.mapPixelToCoords(locPos);
+
 		sf::Event event;
 		while (window.pollEvent(event)) 
 		{
@@ -263,8 +303,19 @@ int main()
 				if (event.mouseWheelScroll.delta > 0) { view.zoom(0.75); }
 				if (event.mouseWheelScroll.delta < 0) { view.zoom(1.35); }
 				break;
+			case sf::Event::LostFocus:
+				WindowFocus = 0;
+				break;
+			case sf::Event::GainedFocus:
+				WindowFocus = 1;
+				break;
 
 			}
+		}
+		if (WindowFocus)
+		{
+
+			Hero.Upd(time, MapPos);
 		}
 
 		//ImGui:
@@ -277,24 +328,35 @@ int main()
 			ImGui::SetWindowPos(ConsMenuPos);
 			ImGui::StyleColorsLight();
 
+			ImGui::Value("View height", target.getView().getSize().x);
+
+			if (ImGui::CollapsingHeader("State")) 
+			{
+				ImGui::Value("Mouse X", MapPos.x);
+				ImGui::Value("Mouse Y", MapPos.y);
+
+				ImGui::Text("Hero:");
+				PrintState(Hero.GetAllState());
+			}
+
 			if (ImGui::CollapsingHeader("Anim Manager"))//основное меню
 			{ 
 
-				std::vector <std::string> AM = AnimMToString(ALL_Anim_Manager);
+				std::vector <std::string> AM = MapToString(Entity::GetMembers());
 				if (ImGui::ListBox("Anim Manager", &ChozeOne, AM)) {}
 				if (ChozeOne != -1)
-				{
-					std::vector <std::string> Animlist = MapToString(ALL_Anim_Manager[ChozeOne].AnimList);
+				{ 
+					std::vector <std::string> Animlist = MapToString(Entity::GetMembers()[AM[ChozeOne]]->AnimList);
 					if (ImGui::ListBox("Animation", &ChozeTwo, Animlist)) {}
 
 					if (ChozeTwo != -1)
 					{
-						ImGui::Value("Speed", ALL_Anim_Manager[ChozeOne].AnimList[Animlist[ChozeTwo]].Speed);
-						ALL_Anim_Manager[ChozeOne].set(Animlist[ChozeTwo]);
+						ImGui::Value("Speed", Entity::GetMembers()[AM[ChozeOne]]->AnimList[Animlist[ChozeTwo]].Speed);
+						Entity::GetMembers()[AM[ChozeOne]]->set(Animlist[ChozeTwo]);
 						ImGui::SliderFloat("Speed", &Speed, 0, 1);
 						if (ImGui::Button("SetSpeed"))
 						{
-							ALL_Anim_Manager[ChozeOne].setAnimSpeed(Animlist[ChozeTwo], Speed);
+							Entity::GetMembers()[AM[ChozeOne]]->setAnimSpeed(Animlist[ChozeTwo], Speed);
 						}
 					}
 				}
@@ -306,7 +368,19 @@ int main()
 
 				//something will be here
 				ImGui::Text("something will be here");
+				if (ImGui::Button("Reloade")) 
+				{ Map.reLoad(); }
 			
+			}
+			if (ImGui::CollapsingHeader("Debug settings"))//основное меню
+			{
+				if (ImGui::CollapsingHeader("Hero")) 
+				{
+
+				}
+				ImGui::SliderInt("Rad hexogon", &Rad, 5, 40);
+				ImGui::SliderInt("Space hexogon", &P, 5, 40);
+
 			}
 			if (ImGui::BeginMenuBar())//¬верхее меню
 			{
@@ -384,21 +458,21 @@ int main()
 
 				if (ImGui::CollapsingHeader("Create Anim Manager")) {
 
-					ImGui::InputText("New Anim Manager", nam, 20);
+					/*ImGui::InputText("New Anim Manager", nam, 20);
 					if (ImGui::Button("Create")) {
 
-						if (checNameAnim(ALL_Anim_Manager, nam)) {
+						if (checNameAnim(Entity::GetMembers(), nam)) {
 							ImGui::Text("Xyu!!!");
 						}
 						else {
 							AnimManager A(nam);
 							ALL_Anim_Manager.push_back(A);
 						}
-					}
+					}*/
 				}
-				if (ALL_Anim_Manager.size() != 0)
+				if (Entity::GetMembers().size() != 0)
 				{
-					std::vector <std::string> a = AnimMToString(ALL_Anim_Manager);
+					std::vector <std::string> a = MapToString(Entity::GetMembers());
 					if (ImGui::ListBox("Chose Anim Manager", &ChozeOne, a)) {}
 					if (ChozeOne != -1)
 					{
@@ -413,7 +487,7 @@ int main()
 							ImGui::SliderFloat("Speed", &Speed, 0, 1);
 							if (ImGui::Button("Create!"))
 							{
-								ALL_Anim_Manager[ChozeOne].create(nam, Anim.FileVec[ChozeTwo].GetWayToPic(5), Speed, Frams, true);
+								Entity::GetMembers()[a[ChozeOne]]->create(nam, Anim.FileVec[ChozeTwo].GetWayToPic(5), Speed, Frams, true);
 								ChozeOne = -1;
 								ChozeTwo = -1;
 								Speed = 0;
@@ -431,28 +505,25 @@ int main()
 
 //UpDate:
 
-		for (int i = 0; i < ALL_Anim_Manager.size(); i++)
-		{
-			ALL_Anim_Manager[i].tick(time);
-		}
+		view.setCenter(Hero.GetPoss());
 
 		window.clear();
 
 		window.setView(view);
 
-		sf::RenderTarget &target = window;
+		
 
-		MainLevel.Draw(target);
+		
 
-		for (int i = 0; i < ALL_Anim_Manager.size(); i++)
-		{
-			ALL_Anim_Manager[i].draw(target);
-		}
+		IsometricLevel.Draw(target, MapPos);
+		//Map.Draw(target);
+
+		Hero.Draw(target);
 
 		ImGui::SFML::Render(window);
 	
 		window.display();
 	}
-
+	ImGui::SFML::Shutdown();
 	return 0;
 }

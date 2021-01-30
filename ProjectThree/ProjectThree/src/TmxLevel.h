@@ -53,7 +53,7 @@ class TmxLevel
     // Рисует все слои тайлов один за другим,
     //  но не рисует объекты (рисованием которых должна заниматься игра).
     // Принимает любую цель для рисования, например, sf::RenderWindow.
-    void Draw(sf::RenderTarget &target) const;
+    void Draw(sf::RenderTarget &target, sf::Vector2f MapPos) const;
 
   private:
     int m_width = 0;
@@ -62,6 +62,7 @@ class TmxLevel
     int m_tileHeight = 0;
     int m_firstTileID = 0;
     sf::Texture m_tilesetImage;
+    std::string  m_orientation = "non";
     std::vector<TmxObject> m_objects;
     std::vector<TmxLayer> m_layers;
 };

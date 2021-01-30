@@ -91,5 +91,14 @@
     <ClInclude Include="SourceLib\TinyXML2\tinyxml2.h">
       <Filter>TMX2</Filter>
     </ClInclude>
+    <ClInclude Include="src\Rand.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hero.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Test.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

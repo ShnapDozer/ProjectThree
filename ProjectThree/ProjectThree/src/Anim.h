@@ -77,7 +77,7 @@ class AnimManager
 public:
 	
 
-	AnimManager(std::string name);
+	AnimManager(std::string name = "Test");
 
 
 	void create(std::string name, std::string file, float speed, int frames, bool loading = false);
