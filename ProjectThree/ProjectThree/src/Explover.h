@@ -27,6 +27,7 @@ public:
 	
 	void setName(std::string name);
 	void setWay(std::string way);
+	void setWayForXML(std::string way);
 
 
 	std::string GetName();
@@ -34,11 +35,13 @@ public:
 
 
 	std::string GetWayToPic(int CharDelet = 1);	
+	std::string GetWayForXML();
 
 
-	std::string name;
+	std::string name, name_Without;
 private:
 	std::string way;
+	std::string WayForXML;
 	std::string WayToPic;
 };
 
@@ -54,6 +57,4 @@ public:
 
 	std::map <std::string, File> FileMap;
 };
-
-
 

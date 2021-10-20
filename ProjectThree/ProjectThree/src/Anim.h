@@ -75,36 +75,33 @@ private:
 class AnimManager 
 {
 public:
-	
 
 	AnimManager(std::string name = "Test");
 
+	void create(std::string name, std::string file, float speed, int frames, bool loading = true);
+		
+	void loadAnim(const std::vector<std::string>& NamesAnim);
 
-	void create(std::string name, std::string file, float speed, int frames, bool loading = false);
-	
-	
-	void loadAnim(std::vector<std::string>NamesAnim);
-
-	
 	void loadAllAnim();
-	
 	
 	void tick(float time);
 	
-
 	void set(std::string name);
-	
+
+	void setAnimList(const std::map<std::string, Animation>& Anims);
 
 	void setAnimSpeed(std::string name, float speed);
 	
 
-	void draw(sf::RenderTarget& target, sf::Vector2f posA = { 0,0 }, float angle = 0);
+	void draw(sf::RenderTarget& target, const sf::Vector2f& posA = { 0,0 }, float angle = 0);
 
+	sf::FloatRect GetRect() const;
 
 	std::string Name;
 	std::map<std::string, Animation> AnimList;
 
 private:
+
 	sf::Sprite S;
 	std::string CurAnim;
 };

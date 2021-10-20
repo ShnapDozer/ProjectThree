@@ -1,6 +1,7 @@
 #include "TmxLevel.h"
 
 #include <iostream>
+#include <algorithm>
 #include "TinyXML2/tinyxml2.h"
 
 using namespace tinyxml2;
@@ -12,6 +13,69 @@ const char DIR_SEPARATOR = '\\';
 #else
 const char DIR_SEPARATOR = '/';
 #endif
+
+float V_product(const sf::Vector2f& A, const sf::Vector2f& B) { return (A.x * B.y - A.y * B.x); }
+
+bool L_intersec(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Vector2f& A1, const sf::Vector2f& B1)
+{
+    float uA = ((B1.x - A1.x) * (A.y - A1.y) - (B1.y - A1.y) * (A.x - A1.x)) / ((B1.y - A1.y) * (B.x - A.x) - (B1.x - A1.x) * (B.y - A.y));
+
+    float uB = ((B.x - A.x) * (A.y - A1.y) - (B.y - A.y) * (A.x - A1.x)) / ((B1.y - A1.y) * (B.x - A.x) - (B1.x - A1.x) * (B.y - A.y));
+
+    if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) return true;
+        
+    return false;
+}
+
+bool T_contains(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Vector2f& C, const sf::Vector2f& P) 
+{
+    float BA = V_product((B - A), (P - A));
+    float CB = V_product((C - B), (P - B));
+    float AC = V_product((A - C), (P - C));
+ 
+    return (BA >= 0.0 && CB >= 0.0 && AC >= 0.0) || (BA < 0.0 && CB < 0.0 && AC < 0.0);
+}
+
+bool P_contains(const TmxPolygon& P, const sf::Vector2f& Point)
+{
+    if (T_contains(P.first, P.second, P.third, Point))
+    { return true; }
+    else if (T_contains(P.first, P.fourth, P.third, Point))
+    { return true; }
+    else return false;
+}
+
+bool P_intersectRect(const TmxPolygon& P, const sf::FloatRect& Rect)
+{
+    std::vector<sf::Vector2f> RV = { {Rect.left, Rect.top}, {Rect.left + Rect.width, Rect.top},
+    {Rect.left + Rect.width, Rect.top + Rect.width }, {Rect.left, Rect.top + Rect.width } };
+
+    int next;
+
+    for (int current = 0; current < RV.size(); ++current)
+    {
+        next = current + 1;
+        if (current == 3)next = 0;
+        if (L_intersec(RV[current], RV[next], P.first, P.second)) return true;
+        if (L_intersec(RV[current], RV[next], P.second, P.third)) return true;
+        if (L_intersec(RV[current], RV[next], P.third, P.fourth)) return true;
+        if (L_intersec(RV[current], RV[next], P.fourth, P.first)) return true;
+    }
+    return false;
+}
+
+void TmxObject::draw(sf::RenderTarget& target, sf::Color color) // Rework!!!!!!
+{
+    sf::VertexArray polygon(sf::Quads, 4);
+
+    polygon[0].position = Polygon.first;
+    polygon[1].position = Polygon.second;
+    polygon[3].position = Polygon.third;
+    polygon[2].position = Polygon.fourth;
+
+    target.draw(polygon);
+}
+
 
 // Returns parent directory of given path;
 std::string GetParentDirectory(const std::string &filepath)
@@ -38,6 +102,27 @@ std::string JoinPaths(const std::string &path, const std::string &subpath)
     }
 
     return path + DIR_SEPARATOR + subpath;
+}
+
+sf::Vector2f pixelToScreenCoords(float x, float y, float tile_Width, float tile_Height)
+{
+    sf::Vector2f F;
+    float tileY = y / tile_Height;
+    float tileX = x / tile_Height;
+    F.x = (tileX - tileY) * tile_Width / 2;
+    F.y = (tileX + tileY) * tile_Height / 2;
+    return F;
+}
+
+TmxPolygon pixelRectToScreenPolygon(sf::FloatRect &oldRect, float tile_Width, float tile_Height)
+{
+    TmxPolygon polygon;
+    polygon.first = pixelToScreenCoords(oldRect.left, oldRect.top, tile_Width, tile_Height);
+    polygon.second = pixelToScreenCoords(oldRect.left + oldRect.width, oldRect.top, tile_Width, tile_Height);
+    polygon.third = pixelToScreenCoords(oldRect.left, oldRect.top + oldRect.height, tile_Width, tile_Height);
+    polygon.fourth = pixelToScreenCoords(oldRect.left + oldRect.width, oldRect.top + oldRect.height, tile_Width, tile_Height);
+
+    return polygon;
 }
 
 // Parses hex-encoded RGB like "6d9fb9"
@@ -110,6 +195,9 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
     {
         throw std::runtime_error("<map> element not found");
     }
+
+    m_layers.clear();
+    m_objects.clear();
 
     // Map element example:
     //   <map version="1.0" orientation="orthogonal"
@@ -221,6 +309,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
 
                 if (m_orientation == "orthogonal")
                 {
+                    m_type = Type::orthogonal;
                     sprite.setTexture(m_tilesetImage);
                     sprite.setTextureRect(subRects[subRectToUse]);
                     sprite.setPosition(cartX, cartY);
@@ -228,16 +317,32 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
                 }
                 else if (m_orientation == "isometric")
                 {
-                    float isoX = (cartX / 2) - cartY;
+                    m_type = Type::isometric;
+                    float isoX = (cartX / 2) - cartY - (m_tileWidth / 2);
                     float isoY = ((cartX / 2) + cartY) / 2;
                     sprite.setTexture(m_tilesetImage);
                     sprite.setTextureRect(subRects[subRectToUse]);
                     sprite.setPosition(isoX, isoY);
                     sprite.setColor(sf::Color(255, 255, 255, layer.opacity));
                 }
-                else  std::cout << "Bad map. Orientation is not found";
+                else if (m_orientation == "staggered")
+                {
+                    float stragX = cartX + y % 2 * (m_tileWidth / 2);
+                    float stragY = y * (m_tileHeight / 2);
+                    m_type = Type::staggered;
+                    sprite.setTexture(m_tilesetImage);
+                    sprite.setTextureRect(subRects[subRectToUse]);
+                    sprite.setPosition(cartX, cartY);
+                    sprite.setColor(sf::Color(255, 255, 255, layer.opacity));
+                }
+                else if (m_orientation == "hexagonal") 
+                {
+                    std::cout << "It's not worked! (Hexagonal map not supported)" << std::endl;
+                    m_type = Type::hexagonal;
+                }
+                else  std::cout << "Bad map. Orientation is not found" << std::endl;
 
-                layer.tiles.push_back(sprite);
+                layer.tiles.push_back(std::move(sprite));
             }
 
             tileElement = tileElement->NextSiblingElement("tile");
@@ -254,7 +359,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
             }
         }
 
-        m_layers.push_back(layer);
+        m_layers.push_back(std::move(layer));
 
         layerElement = layerElement->NextSiblingElement("layer");
     }
@@ -267,8 +372,18 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
     if (map->FirstChildElement("objectgroup") != nullptr)
     {
         XMLElement *objectGroupElement = map->FirstChildElement("objectgroup");
+
+        
+
         while (objectGroupElement)
         {
+            
+            std::string objectName;
+            if (objectGroupElement->Attribute("name") != nullptr)
+            {
+                objectName = objectGroupElement->Attribute("name");
+            }
+
             // Enter into <object> node
             XMLElement *objectElement;
             objectElement = objectGroupElement->FirstChildElement("object");
@@ -276,18 +391,23 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
             while (objectElement)
             {
                 // Collecting object properties - type, name, position, etc.
+
                 std::string objectType;
                 if (objectElement->Attribute("type") != nullptr)
                 {
                     objectType = objectElement->Attribute("type");
                 }
-                std::string objectName;
-                if (objectElement->Attribute("name") != nullptr)
+
+                int objectID;
+                if (objectElement->Attribute("id") != nullptr)
                 {
-                    objectName = objectElement->Attribute("name");
+                    objectID = std::stoi(objectElement->Attribute("id"));
                 }
+
                 float x = std::stof(objectElement->Attribute("x"));
                 float y = std::stof(objectElement->Attribute("y"));
+                float isoX = ((x / 2) - y);
+                float isoY = ((x / 2) + y) / 2;
                 float width = 0;
                 float height = 0;
 
@@ -301,7 +421,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
                     width = std::stof(objectElement->Attribute("width"));
                     height = std::stof(objectElement->Attribute("height"));
                 }
-                else
+                else if (objectElement->Attribute("gid") != nullptr)
                 {
                     const size_t index = std::stoi(objectElement->Attribute("gid")) - m_firstTileID;
                     width = static_cast<float>(subRects[index].width);
@@ -317,11 +437,52 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
                 object.sprite = sprite;
 
                 sf::FloatRect objectRect;
-                objectRect.top = y;
-                objectRect.left = x;
-                objectRect.height = height;
-                objectRect.width = width;
-                object.rect = objectRect;
+
+
+
+
+
+                switch (m_type)
+                {
+
+                case Type::orthogonal:
+                    objectRect.left = x;
+                    objectRect.top = y;
+                    objectRect.height = height;
+                    objectRect.width = width;
+
+                    object.rect = objectRect;
+                    object.poss = { object.rect.left, object.rect.top };
+                    break;
+
+                case Type::isometric:
+
+                    objectRect.left = x;
+                    objectRect.top = y;
+                    objectRect.height = height;
+                    objectRect.width = width;
+
+                    object.Polygon = pixelRectToScreenPolygon(objectRect, m_tileWidth, m_tileHeight);
+                    object.poss = { object.Polygon.first.x, object.Polygon.first.y };
+                    break;
+
+                case Type::staggered:
+                    objectRect.left = x;
+                    objectRect.top = y;
+                    objectRect.height = height;
+                    objectRect.width = width;
+                    break;
+
+                case Type::hexagonal:
+                    objectRect.left = x;
+                    objectRect.top = y;
+                    objectRect.height = height;
+                    objectRect.width = width;
+                    break;
+
+                }
+
+                
 
                 // Read object properties
                 XMLElement *properties = objectElement->FirstChildElement("properties");
@@ -343,7 +504,7 @@ bool TmxLevel::LoadFromFile(const std::string &filepath)
                 }
 
                 // Add object to list
-                m_objects.push_back(object);
+                m_objects.push_back(std::move(object));
 
                 objectElement = objectElement->NextSiblingElement("object");
             }
@@ -367,19 +528,26 @@ TmxObject TmxLevel::GetFirstObject(const std::string &name) const
     throw std::runtime_error("Object with name " + name + " was not found");
 }
 
-std::vector<TmxObject> TmxLevel::GetAllObjects(const std::string &name) const
-{
-    // All objects with given name
-    std::vector<TmxObject> vec;
+void TmxLevel::GetAllObjects(const std::string &name, std::vector<TmxObject>& Cont) 
+{  
     for (size_t i = 0; i < m_objects.size(); i++)
     {
         if (m_objects[i].name == name)
         {
-            vec.push_back(m_objects[i]);
+            Cont.push_back(m_objects[i]);
         }
     }
+}
 
-    return vec;
+void TmxLevel::GetOtherObjects(const std::string& name, std::vector<TmxObject>& Cont)
+{
+    for (size_t i = 0; i < m_objects.size(); i++)
+    {
+        if (m_objects[i].name != name)
+        {
+            Cont.push_back(m_objects[i]);
+        }
+    }
 }
 
 sf::Vector2i TmxLevel::GetTileSize() const

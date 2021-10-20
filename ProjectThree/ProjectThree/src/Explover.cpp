@@ -1,15 +1,22 @@
 #include "Explover.h"
 #include "TinyXML/tinyxml.h"
 
+std::string getName_Without(std::string name) 
+{ return name.substr(0, name.find('.')); }
 
-File::File(std::string name, std::string way)
+File::File(std::string n, std::string w) : name(n), way(w) 
 {
-	this->name = name;
-	this->way = way;
-};
+	name_Without = getName_Without(n);
+}
 
-void File::setName(std::string name) { this->name = name; }
+void File::setName(std::string name) 
+{
+	this->name = name; 
+	this->name_Without = getName_Without(name);
+}
 void File::setWay(std::string way) { this->way = way; }
+
+void File::setWayForXML(std::string way) { WayForXML = way; }
 
 std::string File::GetName() { return name; }
 std::string File::GetWay() { return  way; }
@@ -21,6 +28,7 @@ std::string File::GetWayToPic(int CharDelet)
 	return  WayToPic;
 }
 
+std::string File::GetWayForXML() { return WayForXML; }
 
 //------------Explover Class:
 
@@ -33,6 +41,10 @@ Ex::Ex(std::string WayOne, std::string Waytwo)
 	GetCurrentDirectory(MAX_PATH, workdir);
 
 	File f;
+
+	std::string WayXML = WayOne;
+	WayXML.erase(0, 1);
+	WayXML.erase(WayXML.end() - WayXML.begin() - 1, 1);
 
 	std::string s = workdir;
 	s = s + WayOne;
@@ -48,6 +60,7 @@ Ex::Ex(std::string WayOne, std::string Waytwo)
 			f.setName(FindFileData.cFileName);
 			FileNamesVec.push_back(FindFileData.cFileName);
 			f.setWay(Waytwo + FindFileData.cFileName);
+			f.setWayForXML(WayXML + FindFileData.cFileName);
 			FileVec.push_back(f);
 			std::cout << FindFileData.cFileName << std::endl;
 		} while (FindNextFile(hf, &FindFileData) != 0);

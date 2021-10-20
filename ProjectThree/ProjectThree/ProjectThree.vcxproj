@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts_Mg.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SourceLib\ImGui\imgui-SFML.cpp" />
     <ClCompile Include="SourceLib\ImGui\imgui.cpp" />
@@ -164,8 +165,11 @@
     <ClCompile Include="SourceLib\TinyXML\tinyxmlerror.cpp" />
     <ClCompile Include="SourceLib\TinyXML\tinyxmlparser.cpp" />
     <ClCompile Include="src\Anim.cpp" />
+    <ClCompile Include="src\Entity_Mg.cpp" />
     <ClCompile Include="src\Explover.cpp" />
-    <ClCompile Include="src\Level.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\ImGui_Mg.cpp" />
     <ClCompile Include="src\TmxLevel.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,11 +177,13 @@
     <ClInclude Include="SourceLib\TinyXML\tinystr.h" />
     <ClInclude Include="SourceLib\TinyXML\tinyxml.h" />
     <ClInclude Include="src\Anim.h" />
+    <ClInclude Include="src\Entity_Mg.h" />
     <ClInclude Include="src\Explover.h" />
-    <ClInclude Include="src\Hero.h" />
-    <ClInclude Include="src\Level.h" />
-    <ClInclude Include="src\Rand.h" />
-    <ClInclude Include="src\Test.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\ImGui_Mg.h" />
+    <ClInclude Include="src\Script.h" />
+    <ClInclude Include="src\Scripts_Mg.h" />
     <ClInclude Include="src\TmxLevel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -41,9 +41,6 @@
     <ClCompile Include="src\Anim.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Level.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Explover.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -68,6 +65,21 @@
     <ClCompile Include="SourceLib\TinyXML2\tinyxml2.cpp">
       <Filter>TMX2</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImGui_Mg.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity_Mg.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts_Mg.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceLib\TinyXML\tinyxml.h">
@@ -79,9 +91,6 @@
     <ClInclude Include="src\Anim.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Level.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="src\Explover.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -91,13 +100,22 @@
     <ClInclude Include="SourceLib\TinyXML2\tinyxml2.h">
       <Filter>TMX2</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rand.h">
+    <ClInclude Include="src\Game.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hero.h">
+    <ClInclude Include="src\ImGui_Mg.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Test.h">
+    <ClInclude Include="src\Entity.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity_Mg.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripts_Mg.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Script.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

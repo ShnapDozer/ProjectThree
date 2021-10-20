@@ -12,8 +12,6 @@ Animation::Animation()
 	Frames = 0;
 }
 
-
-
 Animation::Animation(std::string file, float speed, int frames)
 {
 	Speed = speed; 
@@ -29,11 +27,11 @@ bool Animation::Load()
 		std::cout << "File is empty! /t .|.";
 		return false;
 	}
+	sf::Texture T;
 	for (int i = 0; i < Frames; i++)
 	{
-		sf::Texture T;
 		T.loadFromFile(File + numList[i]);
-		AnimTexture.push_back(T);
+		AnimTexture.push_back(std::move(T));
 	}
 	isPlay = true;
 	isLoad = true;
@@ -73,12 +71,12 @@ AnimManager::AnimManager(std::string name) { Name = name; }
 void AnimManager::create(std::string name, std::string file, float speed, int frames, bool loading)
 {
 	Animation Anim(file, speed, frames);
-	AnimList[name] = Anim;
+	AnimList[name] = std::move(Anim);
 	CurAnim = name;
 	if (loading) { AnimList[name].Load(); }
 }
 
-void AnimManager::loadAnim(std::vector<std::string>NameAnim)
+void AnimManager::loadAnim(const std::vector<std::string>& NameAnim)
 {
 
 }
@@ -102,12 +100,18 @@ void AnimManager::set(std::string name)
 	CurAnim = name;
 }
 
+void AnimManager::setAnimList(const std::map<std::string, Animation>& Anims)
+{
+	if (!Anims.empty()) AnimList = Anims;
+	else std::cout << "Anim manager: " << Name << " can't set! Empty  anim list! :(" << std::endl;
+}
+
 void AnimManager::setAnimSpeed(std::string name, float speed)
 {
 	AnimList[name].setSpeed(speed);
 }
 
-void AnimManager::draw(sf::RenderTarget& target, sf::Vector2f posA, float angle)
+void AnimManager::draw(sf::RenderTarget& target, const sf::Vector2f& posA, float angle)
 {
 	if (AnimList.size() == 0 || !AnimList[CurAnim].isLoad) return;
 	const sf::FloatRect viewportRect = target.getView().getViewport();
@@ -122,3 +126,8 @@ void AnimManager::draw(sf::RenderTarget& target, sf::Vector2f posA, float angle)
 		target.draw(S);
 	}
 }
+
+sf::FloatRect AnimManager::GetRect() const { return S.getGlobalBounds(); }
+
+	
+
