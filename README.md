@@ -28,4 +28,46 @@ ImGUI построен на окнах и виджетах в них, котор
 Красота реализации данной задачи очень проста:
 - Мы следуем главным парадигмам ООП
 - Код является легко поддерживаемым, для создания нового окна мы просто:
--- наследуемся от класса-родителя и переписываем стандартный метод, задающий окно,
+  - Наследуемся от класса-родителя и переписываем стандартный метод, задающий окно
+  - Вставляем объект нашего окна в вектор окон
+- Также везде используются умные указатели, не дающие и шанса памяти утечь
+##### Класс-родитель и его функции:
+```c++
+class AnotherWindow // Parent class for all windows
+{
+public:
+
+	AnotherWindow(const std::string& name, ImVec2& Size, ImVec2& Pos) : name_Windows(name), WinSize(Size), WinPos(Pos) {}
+  // a standard constructor that accepts the name, size, and position of the window
+
+	virtual void inWork() = 0; // virtual function which implements the functionality of the window
+...Other methods and variables...
+};
+```
+##### Добавление в менеджер окон нового окна:
+```c++
+IMG_Manager::IMG_Manager(...some...) // constructor of the window manager class
+{
+  All_Window.push_back(std::make_shared<Example_Window>(...some...)); // adding a new window to the window vector
+}
+```
+##### Работа менеджара окон в главном игровом цикле:
+```c++
+while(true)// The main game cycle
+{
+...Some game code....
+
+// - Part of the cycle data update:
+  ImGUI_Manager->update(Main_Window, deltaClock);
+  ImGUI_Manager->Work();
+  
+// - Part of the cycle render:
+  ImGUI_Manager->Render(*Main_Window);
+}
+```
+
+В итоге после создания данного менеджера кода в главном игровом цикле стало в разы меньше, а работа по созданию новых окон упрастилась.
+Считаю данные классы самыми удачными в плане реализации поставленной задачи.
+
+###Остальные приколы опишу чуть позже....(устал)
+
