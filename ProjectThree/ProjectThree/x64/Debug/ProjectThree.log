@@ -1,8 +1,0 @@
-﻿  imgui-SFML.cpp
-  imgui.cpp
-  TmxLevel.cpp
-O:\Programing\ProjectThree\ProjectThree\ProjectThree\src\TmxLevel.cpp(331,34): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-O:\Programing\ProjectThree\ProjectThree\ProjectThree\src\TmxLevel.cpp(465,88): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-O:\Programing\ProjectThree\ProjectThree\ProjectThree\src\TmxLevel.cpp(465,75): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
-  ProjectThree.vcxproj -> O:\Programing\ProjectThree\ProjectThree\x64\Debug\ProjectThree.exe
