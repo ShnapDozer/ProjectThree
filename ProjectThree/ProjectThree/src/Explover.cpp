@@ -1,72 +1,76 @@
 #include "Explover.h"
 #include "TinyXML/tinyxml.h"
 
-std::string getName_Without(std::string name) 
-{ return name.substr(0, name.find('.')); }
-
-File::File(std::string n, std::string w) : name(n), way(w) 
+namespace ProjectThree
 {
-	name_Without = getName_Without(n);
-}
-
-void File::setName(std::string name) 
-{
-	this->name = name; 
-	this->name_Without = getName_Without(name);
-}
-void File::setWay(std::string way) { this->way = way; }
-
-void File::setWayForXML(std::string way) { WayForXML = way; }
-
-std::string File::GetName() { return name; }
-std::string File::GetWay() { return  way; }
-
-std::string File::GetWayToPic(int CharDelet)
-{
-	WayToPic = way;
-	WayToPic.erase(WayToPic.end() - CharDelet, WayToPic.end());
-	return  WayToPic;
-}
-
-std::string File::GetWayForXML() { return WayForXML; }
-
-//------------Explover Class:
-
-Ex::Ex(std::string WayOne, std::string Waytwo)
-{
-	WIN32_FIND_DATA FindFileData;
-	HANDLE hf;
-
-	char workdir[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, workdir);
-
-	File f;
-
-	std::string WayXML = WayOne;
-	WayXML.erase(0, 1);
-	WayXML.erase(WayXML.end() - WayXML.begin() - 1, 1);
-
-	std::string s = workdir;
-	s = s + WayOne;
-	const char* fds[]{ s.c_str() };
-
-	hf = FindFirstFile(s.c_str(), &FindFileData);
-
-	setlocale(LC_ALL, "Russian");
-
-	if (hf != INVALID_HANDLE_VALUE) {
-		do
-		{
-			f.setName(FindFileData.cFileName);
-			FileNamesVec.push_back(FindFileData.cFileName);
-			f.setWay(Waytwo + FindFileData.cFileName);
-			f.setWayForXML(WayXML + FindFileData.cFileName);
-			FileVec.push_back(f);
-			std::cout << FindFileData.cFileName << std::endl;
-		} while (FindNextFile(hf, &FindFileData) != 0);
-		FindClose(hf);
+	std::string getName_Without(std::string name)
+	{
+		return name.substr(0, name.find('.'));
 	}
 
+	File::File(std::string n, std::string w) : name(n), way(w)
+	{
+		name_Without = getName_Without(n);
+	}
+
+	void File::setName(std::string name)
+	{
+		this->name = name;
+		this->name_Without = getName_Without(name);
+	}
+	void File::setWay(std::string way) { this->way = way; }
+
+	void File::setWayForXML(std::string way) { WayForXML = way; }
+
+	std::string File::GetName() { return name; }
+	std::string File::GetWay() { return  way; }
+
+	std::string File::GetWayToPic(int CharDelet)
+	{
+		WayToPic = way;
+		WayToPic.erase(WayToPic.end() - CharDelet, WayToPic.end());
+		return  WayToPic;
+	}
+
+	std::string File::GetWayForXML() { return WayForXML; }
+
+	//------------Explover Class:
+
+	Ex::Ex(std::string WayOne, std::string Waytwo)
+	{
+		WIN32_FIND_DATA FindFileData;
+		HANDLE hf;
+
+		char workdir[MAX_PATH];
+		GetCurrentDirectory(MAX_PATH, workdir);
+
+		File f;
+
+		std::string WayXML = WayOne;
+		WayXML.erase(0, 1);
+		WayXML.erase(WayXML.end() - WayXML.begin() - 1, 1);
+
+		std::string s = workdir;
+		s = s + WayOne;
+		const char* fds[]{ s.c_str() };
+
+		hf = FindFirstFile(s.c_str(), &FindFileData);
+
+		setlocale(LC_ALL, "Russian");
+
+		if (hf != INVALID_HANDLE_VALUE) {
+			do
+			{
+				f.setName(FindFileData.cFileName);
+				FileNamesVec.push_back(FindFileData.cFileName);
+				f.setWay(Waytwo + FindFileData.cFileName);
+				f.setWayForXML(WayXML + FindFileData.cFileName);
+				FileVec.push_back(f);
+				std::cout << FindFileData.cFileName << std::endl;
+			} while (FindNextFile(hf, &FindFileData) != 0);
+			FindClose(hf);
+		}
+	}
 }
 
 

@@ -5,125 +5,111 @@
 #include <vector>
 #include <ctime>
 
-
 #include <SFML/Graphics.hpp>
 #include "TMXLevel.h"
 
 #include "Anim.h"
+#include "Object.h"
 
-
-enum class state
+namespace ProjectThree
 {
-	left,
-	right,
-	up,
-	down,
-	up_left,
-	up_right,
-	down_left,
-	down_right,
-	stay
-};
 
-class Entity 
-{
-public:
-	
-	Entity(std::string name, const sf::Vector2f& posS = { 0.f,0.f });
+	#define AnimManagerPtr std::shared_ptr<AnimManager> 
 
-	bool Collision() const;
-
-	bool Check_Collision(const std::vector<TmxObject>& Solid_Vec) const;
-
-	sf::Vector2f GetPoss() const;
-
-	sf::FloatRect GetRect() const;
-
-	std::string GetName() const;
-
-	void AddAnim(std::string name, std::string file, float speed, int frames);
-
-	void SetAnim_Mg(AnimManager& A);
-
-	void ChoiseAnim(std::string Name);
-
-	void Draw(sf::RenderTarget& target);
-
-	virtual std::map<std::string, float> GetAllState() const = 0;
-
-	virtual void Update(float time, const sf::Vector2f& map_Pos, bool ImGui, const std::vector<TmxObject>& Solid_Vec) = 0;
-
-	static std::map <std::string, AnimManager*> GetMembers();
-	
-protected:
-
-	bool life, collision;
-
-	std::string Name;
-
-	AnimManager Main;
-	sf::Vector2f posA;
-
-	static std::map <std::string, AnimManager*> Members;
-};
-
-class Hero : public Entity
-{
-public:
-	
-	Hero(std::string name, const sf::Vector2f& posS = { 0,0 });
-
-	void Update(float time, const sf::Vector2f& map_Pos, bool ImGui, const std::vector<TmxObject>& Solid_Vec)override;
-	
-	std::map<std::string, float> GetAllState() const override;
-
-private:
-
-	float dx = 0;
-	float dy = 0;
-	float vector = 0;
-	float rotation_rad = 0;
-	float rotation_grad = 0;
-
-	state State = state::stay;
-};
-
-class NPC : public Entity
-{
-public:
-	NPC(std::string name, const sf::Vector2f& posS = { 0,0 })
-		: Entity(name, posS), interaction(false) {}
-
-	void Update(float time, const sf::Vector2f& map_Pos, bool ImGui, const std::vector<TmxObject>& Solid_Vec)override
+	enum class state
 	{
-		Main.tick(time);
+		left,
+		right,
+		up,
+		down,
 
-		collision = Check_Collision(Solid_Vec);
-		interaction = Main.GetRect().contains(map_Pos) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && !ImGui;
+		up_left,
+		up_right,
+		down_left,
+		down_right,
 
-		posA.x += dx * time;
-		posA.y += dy * time;
-		dx = 0;
-		dy = 0;
-	}
+		stay
+	};
 
-	std::map<std::string, float> GetAllState() const override 
+	class WorldObject : public Object 
 	{
-		std::map<std::string, float> AllState;
-		AllState["X"] = posA.x;
-		AllState["Y"] = posA.y;
-		AllState["Is Life"] = life;
-		AllState["Collision"] = collision;
+	public:
+		WorldObject(const std::string& name,  const sf::Vector2f& startPosition = { 0.f,0.f });
 
-		return AllState;
-	}
+		std::string getName() const;
+		void setName(std::string name);
 
-private:
+		sf::Vector2f getPosition() const;
+		void setPosition(sf::Vector2f position);
 
-	float dx = 0;
-	float dy = 0;
+		bool getCollision() const;
+		bool checkCollisionWithObjects(const std::vector<TmxObject>& solidObjects) const;
 
-	bool interaction;
+		sf::FloatRect getRect() const;
+		void setRect(const sf::FloatRect &rect);
 
-	state State = state::stay;
-};
+	protected:
+		bool _collision;
+
+		std::string _name;
+
+		sf::Vector2f _position;
+		sf::FloatRect _rect;
+	};
+
+	class Entity : public WorldObject
+	{
+	public:
+
+		Entity(const std::string& name, const sf::Vector2f& startPosition = { 0.f,0.f });
+
+		void setAnimManager(const AnimManager& animManager);
+		AnimManager getAnimManager() const;
+
+		void selectAnimation(const std::string &name);
+		void drawAnimation(sf::RenderTarget& target);
+
+		virtual void update(double time) = 0;
+
+	protected:
+
+		bool _die;		
+		AnimManager _animManager;
+	};
+
+	class Hero : public Entity
+	{
+	public:
+
+		Hero(const std::string& name, const sf::Vector2f& startPosition = { 0.f,0.f });
+		void update(double time) override;
+
+	private:
+
+		float dx;
+		float dy;
+		float vector;
+		float rotation_rad;
+		float rotation_grad;
+
+		state State = state::stay;
+	};
+
+	class NPC : public Entity
+	{
+	public:
+		NPC(std::string name, const sf::Vector2f& posS = { 0,0 })
+			: Entity(name, posS), interaction(false) {}
+
+		void update(double time) override;
+
+	private:
+
+		float dx = 0;
+		float dy = 0;
+
+		bool interaction;
+
+		state State = state::stay;
+	};
+}

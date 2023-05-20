@@ -1,84 +1,96 @@
 #include "Entity_Mg.h"
 
-Entity_Manager::Entity_Manager(std::shared_ptr<Level_Manager> L_M, std::shared_ptr<Scripts_Manager> S_M)
-	: Lvl_Mg(L_M), Scr_Mg(S_M)
+namespace ProjectThree
 {
-	Entity_Objects = Lvl_Mg->Lvl_Other_Vec();
-	Solid_Objects = Lvl_Mg->Lvl_Solid_Vec();
 
-	std::string Name, Param;
-
-	Entity_List.resize(Entity_Objects.size() - 1);
-
-	int count = 0;
-
-	for (auto i : Entity_Objects)
+	EntityManager::EntityManager(std::shared_ptr<Level_Manager> L_M, std::shared_ptr<Scripts_Manager> S_M)
+		: _levelManager(L_M), scriptManager(S_M)
 	{
-		Param = i.name.substr(0, i.name.find('_'));
-		Name = i.name.substr(i.name.find('_') + 1);
+		entityObjects = _levelManager->Lvl_Other_Vec();
+		_solidObjects = _levelManager->Lvl_Solid_Vec();
 
-		if (Param == "Hero") 
-		{ 
-			GG = std::make_shared<Hero>(Name, i.poss);
-			if (Scr_Mg->Get_Anim_Manager(Name) != NULL)
-			{
-				GG->SetAnim_Mg(*Scr_Mg->Get_Anim_Manager(Name));
-			}
-			
-		}
-		else if (Param == "NPC") 
-		{ 
-			Entity_List[count++] = std::make_shared<NPC>(Name, i.poss);
-		}
-		else { std::cout << i.name << " - bad object" << std::endl; }
-	}
-}
+		std::string Name, Param;
 
-void Entity_Manager::Update(float time, const sf::Vector2f& map_Pos, bool ImGui)
-{
-	GG->Update(time, map_Pos, ImGui, Solid_Objects);
-	for (auto i : Entity_List) { if (i != nullptr)i->Update(time, map_Pos, ImGui, Solid_Objects); }
-}
+		_entitys.resize(entityObjects.size() - 1);
 
-void Entity_Manager::Draw(sf::RenderTarget& Target)
-{
-	GG->Draw(Target);
-	for (auto i : Entity_List) { if (i != nullptr)i->Draw(Target); }
-}
+		int count = 0;
 
-void Entity_Manager::SetScript()
-{
-	if (Scr_Mg->Get_Anim_Manager(GG->GetName()) != NULL)
-	{
-		GG->SetAnim_Mg(*Scr_Mg->Get_Anim_Manager(GG->GetName()));
-	}
-
-	for (auto i : Entity_List)
-	{
-		if (Scr_Mg->Get_Anim_Manager(i->GetName()) != NULL)
+		for (auto i : entityObjects)
 		{
-			i->SetAnim_Mg(*Scr_Mg->Get_Anim_Manager(GG->GetName()));
+			Param = i.name.substr(0, i.name.find('_'));
+			Name = i.name.substr(i.name.find('_') + 1);
+
+			if (Param == "Hero")
+			{
+				_hero = std::make_shared<Hero>(Name, i.poss);
+				if (scriptManager->Get_Anim_Manager(Name) != NULL)
+				{
+					_hero->setAnimManager(*scriptManager->Get_Anim_Manager(Name));
+				}
+
+			}
+			else if (Param == "NPC")
+			{
+				_entitys[count++] = std::make_shared<NPC>(Name, i.poss);
+			}
+			else { std::cout << i.name << " - bad object" << std::endl; }
 		}
 	}
-}
 
-std::shared_ptr<Hero> Entity_Manager::GetHero()
-{
-	if (GG != NULL)return GG;
-	
-	else 
+	void EntityManager::update(double time)
 	{
-		std::cout << "Hero is empty!!!" << std::endl;
-		return std::shared_ptr<Hero>();
+		_hero->update(time);
+
+		for (auto entity : _entitys) { 
+			if (entity != nullptr) {
+				entity->update(time);
+			}
+				
+		}
 	}
-}
 
-sf::Vector2f Entity_Manager::GetHeroPos() const
-{
-	if (GG != NULL) return GG->GetPoss();
-	else
+	void EntityManager::draw(sf::RenderTarget& Target)
 	{
-		std::cout << "Hero is empty!!!" << std::endl;
-		return{ 0.f,0.f };
+		_hero->drawAnimation(Target);
+
+		for (auto entity : _entitys) {
+			if (entity != nullptr) {
+				entity->drawAnimation(Target);
+			}
+		}
+	}
+
+	void EntityManager::setScript()
+	{
+		if (scriptManager->Get_Anim_Manager(_hero->getName()) != nullptr)
+		{
+			_hero->setAnimManager(*scriptManager->Get_Anim_Manager(_hero->getName()));
+		}
+
+		for (auto entity : _entitys)
+		{
+			if (scriptManager->Get_Anim_Manager(entity->getName()) != nullptr)
+			{
+				entity->setAnimManager(*scriptManager->Get_Anim_Manager(_hero->getName()));
+			}
+		}
+	}
+
+	std::shared_ptr<Hero> EntityManager::getHero()
+	{
+		if (_hero == nullptr) {
+			return std::shared_ptr<Hero>();
+		}
+
+		return _hero;
+	}
+
+	sf::Vector2f EntityManager::getHeroPosition() const
+	{
+		if (_hero == nullptr) {
+			return{ 0.f,0.f };
+		}
+
+		return _hero->getPosition();		
 	}
 }

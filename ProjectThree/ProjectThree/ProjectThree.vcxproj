@@ -164,7 +164,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Scripts_Mg.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SourceLib\ImGui\imgui-SFML.cpp" />
     <ClCompile Include="SourceLib\ImGui\imgui.cpp" />
@@ -179,21 +178,30 @@
     <ClCompile Include="src\Anim.cpp" />
     <ClCompile Include="src\Entity_Mg.cpp" />
     <ClCompile Include="src\Explover.cpp" />
-    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\FileDialog.cpp" />
+    <ClCompile Include="src\GameApplication.cpp" />
     <ClCompile Include="src\Entity.cpp" />
-    <ClCompile Include="src\ImGui_Mg.cpp" />
+    <ClCompile Include="src\InputController.cpp" />
+    <ClCompile Include="src\Object.cpp" />
+    <ClCompile Include="src\Scripts_Mg.cpp" />
+    <ClCompile Include="src\WindowManager.cpp" />
     <ClCompile Include="src\TmxLevel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InputController.h" />
     <ClInclude Include="SourceLib\TinyXML2\tinyxml2.h" />
     <ClInclude Include="SourceLib\TinyXML\tinystr.h" />
     <ClInclude Include="SourceLib\TinyXML\tinyxml.h" />
     <ClInclude Include="src\Anim.h" />
+    <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\Entity_Mg.h" />
     <ClInclude Include="src\Explover.h" />
-    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\FileDialog.h" />
+    <ClInclude Include="src\GameApplication.h" />
     <ClInclude Include="src\Entity.h" />
-    <ClInclude Include="src\ImGui_Mg.h" />
+    <ClInclude Include="src\InputController.h" />
+    <ClInclude Include="src\Object.h" />
+    <ClInclude Include="src\WindowManager.h" />
     <ClInclude Include="src\Script.h" />
     <ClInclude Include="src\Scripts_Mg.h" />
     <ClInclude Include="src\TmxLevel.h" />

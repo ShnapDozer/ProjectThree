@@ -11,68 +11,72 @@
 
 #include "Anim.h"
 
-class Script_Anim 
+namespace ProjectThree
 {
-public:
 
-	Script_Anim(std::string name) 
-		: Name(name) {}
-
-	void add_Anim(std::string name, Animation anim) 
+	class Script_Anim
 	{
-		AnimList[name] = anim;
-	}
+	public:
 
-	std::map<std::string, Animation>* get_Data() 
+		Script_Anim(std::string name)
+			: Name(name) {}
+
+		void add_Anim(std::string name, Animation anim)
+		{
+			AnimList[name] = anim;
+		}
+
+		std::map<std::string, Animation>* get_Data()
+		{
+			return &AnimList;
+		}
+
+		const std::string Name;
+	private:
+		std::map<std::string, Animation> AnimList;
+	};
+
+	class Script_Dial
 	{
-		return &AnimList;
-	}
+	public:
 
-	const std::string Name;
-private:
-	std::map<std::string, Animation> AnimList;
-};
+		Script_Dial(std::string name)
+			: Name(name) {}
 
-class Script_Dial
-{
-public:
+		void add_Anim(std::string name, Animation anim)
+		{
 
-	Script_Dial(std::string name)
-		: Name(name) {}
+		}
 
-	void add_Anim(std::string name, Animation anim)
+		void get_Data()
+		{
+
+		}
+
+		const std::string Name;
+	private:
+
+	};
+
+	class Script_Stats
 	{
+	public:
 
-	}
+		Script_Stats(std::string name)
+			: Name(name) {}
 
-	void get_Data()
-	{
+		void add_Anim(std::string name, Animation anim)
+		{
 
-	}
+		}
 
-	const std::string Name;
-private:
-	
-};
+		void get_Data()
+		{
 
-class Script_Stats
-{
-public:
+		}
 
-	Script_Stats(std::string name)
-		: Name(name) {}
+		const std::string Name;
+	private:
 
-	void add_Anim(std::string name, Animation anim)
-	{
-		
-	}
-
-	void get_Data()
-	{
-		
-	}
-
-	const std::string Name;
-private:
-	
-};
+	};
+}

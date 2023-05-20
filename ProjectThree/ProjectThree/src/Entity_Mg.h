@@ -10,30 +10,32 @@
 #include "Entity.h" 
 #include "TmxLevel.h"
 #include "Anim.h"
-#include"Scripts_Mg.h"
+#include "Scripts_Mg.h"
 
-
-class Entity_Manager
+namespace ProjectThree
 {
-public:
 
-	Entity_Manager(std::shared_ptr <Level_Manager> L_M, std::shared_ptr <Scripts_Manager> S_M);
+	class EntityManager
+	{
+	public:
 
-	void Update(float time, const sf::Vector2f& map_Pos, bool ImGui);
+		EntityManager(std::shared_ptr <Level_Manager> L_M, std::shared_ptr <Scripts_Manager> S_M);
 
-	void Draw(sf::RenderTarget& Target);
+		void update(double time); 
+		void draw(sf::RenderTarget& Target);
 
-	void SetScript();
+		void setScript();
 
-	std::shared_ptr<Hero> GetHero();
+		std::shared_ptr<Hero> getHero();
+		sf::Vector2f getHeroPosition() const;
 
-    sf::Vector2f GetHeroPos() const;
+	private:
 
-private:
-
-	std::shared_ptr<Hero> GG;
-	std::vector<std::shared_ptr<Entity>> Entity_List;
-	std::vector<TmxObject> Entity_Objects, Solid_Objects;
-	const std::shared_ptr <Level_Manager> Lvl_Mg;
-	std::shared_ptr <Scripts_Manager> Scr_Mg;
-};
+		std::shared_ptr<Hero> _hero;
+		std::vector<std::shared_ptr<Entity>> _entitys;
+		std::vector<TmxObject> entityObjects;
+		std::vector<TmxObject> _solidObjects;
+		std::shared_ptr <Level_Manager> _levelManager;
+		std::shared_ptr <Scripts_Manager> scriptManager;
+	};
+}

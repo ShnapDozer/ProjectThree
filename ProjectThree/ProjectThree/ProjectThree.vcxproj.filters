@@ -65,10 +65,10 @@
     <ClCompile Include="SourceLib\TinyXML2\tinyxml2.cpp">
       <Filter>TMX2</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game.cpp">
+    <ClCompile Include="src\GameApplication.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ImGui_Mg.cpp">
+    <ClCompile Include="src\WindowManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Entity.cpp">
@@ -77,7 +77,16 @@
     <ClCompile Include="src\Entity_Mg.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts_Mg.cpp">
+    <ClCompile Include="src\FileDialog.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripts_Mg.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InputController.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -100,10 +109,10 @@
     <ClInclude Include="SourceLib\TinyXML2\tinyxml2.h">
       <Filter>TMX2</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game.h">
+    <ClInclude Include="src\GameApplication.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImGui_Mg.h">
+    <ClInclude Include="src\WindowManager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\Entity.h">
@@ -116,6 +125,21 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\Script.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FileDialog.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Common.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="InputController.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputController.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

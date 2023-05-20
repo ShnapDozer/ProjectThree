@@ -14,47 +14,49 @@ GetCurrentDirectory(MAX_PATH, workdir);
 Свойства Конфигурации => Дополнительно => Наборы Символов
 */
 
-
-class File 
+namespace ProjectThree
 {
-public:
+	class File
+	{
+	public:
 
-	File(){}
-
-
-	File(std::string name, std::string way);
-
-	
-	void setName(std::string name);
-	void setWay(std::string way);
-	void setWayForXML(std::string way);
+		File() {}
 
 
-	std::string GetName();
-	std::string GetWay();
+		File(std::string name, std::string way);
 
 
-	std::string GetWayToPic(int CharDelet = 1);	
-	std::string GetWayForXML();
+		void setName(std::string name);
+		void setWay(std::string way);
+		void setWayForXML(std::string way);
 
 
-	std::string name, name_Without;
-private:
-	std::string way;
-	std::string WayForXML;
-	std::string WayToPic;
-};
+		std::string GetName();
+		std::string GetWay();
 
 
-class Ex 
-{
-public:
-	Ex(std::string WayOne, std::string Waytwo);
-	
-	
-	std::vector<File> FileVec;
-	std::vector<std::string> FileNamesVec;
+		std::string GetWayToPic(int CharDelet = 1);
+		std::string GetWayForXML();
 
-	std::map <std::string, File> FileMap;
-};
+
+		std::string name, name_Without;
+	private:
+		std::string way;
+		std::string WayForXML;
+		std::string WayToPic;
+	};
+
+
+	class Ex
+	{
+	public:
+		Ex(std::string WayOne, std::string Waytwo);
+
+
+		std::vector<File> FileVec;
+		std::vector<std::string> FileNamesVec;
+
+		std::map <std::string, File> FileMap;
+	};
+}
 

@@ -16,32 +16,36 @@
 #include "Script.h" 
 #include "Anim.h"
 
-class Scripts_Manager
+namespace ProjectThree
 {
-public:
 
-	Scripts_Manager(Ex script)
-		:change_An(false), change_Di(false), change_St(false) {}
+	class Scripts_Manager
+	{
+	public:
 
-	std::shared_ptr<AnimManager> Get_Anim_Manager(std::string name);
-	
-	std::shared_ptr<Script_Dial> Get_Dial_Script(std::string name);
-	
-	std::shared_ptr<Script_Stats> Get_Stats_Script(std::string name); 
-	
-	void Read_Script_An(File F); 
+		Scripts_Manager(Ex script)
+			:change_An(false), change_Di(false), change_St(false) {}
 
-	void Update_Scr_An();
-	
-	void Save_Script_An(std::string name_F = "AuthoSave");
-	
-	~Scripts_Manager();
+		std::shared_ptr<AnimManager> Get_Anim_Manager(std::string name);
 
-private:
-	std::map<std::string , std::shared_ptr<AnimManager>> Script_An;
-	std::vector<std::shared_ptr<Script_Dial>> Script_Di;
-	std::vector<std::shared_ptr<Script_Stats>> Script_St;
+		std::shared_ptr<Script_Dial> Get_Dial_Script(std::string name);
 
-	bool change_An, change_Di, change_St;
-};
+		std::shared_ptr<Script_Stats> Get_Stats_Script(std::string name);
+
+		void Read_Script_An(File F);
+
+		void Update_Scr_An();
+
+		void Save_Script_An(std::string name_F = "AuthoSave");
+
+		~Scripts_Manager();
+
+	private:
+		std::map<std::string, std::shared_ptr<AnimManager>> Script_An;
+		std::vector<std::shared_ptr<Script_Dial>> Script_Di;
+		std::vector<std::shared_ptr<Script_Stats>> Script_St;
+
+		bool change_An, change_Di, change_St;
+	};
+}
 

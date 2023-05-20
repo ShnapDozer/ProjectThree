@@ -1,22 +1,22 @@
 #pragma once
 
-#include "src/Game.h"
+#include <assert.h>
 
-// Static:
-bool AnotherWindow::show_F_LLFF_window       = 0;
-bool AnotherWindow::show_S_Video_window      = 0;
-bool AnotherWindow::show_A_Create_window     = 0;
-bool AnotherWindow::show_L_Create_window     = 0;
-bool AnotherWindow::show_Sc_Load_window   = 0;
+#include "src/GameApplication.h"
 
-std::map <std::string, AnimManager*> Entity::Members;
-
-int main()
+int main(int argc, char* argv[])
 {
-	int Wx = 1440;
-	int Wy = 900;
-	Game game(Wx, Wy);
-	game.processing();
-	ImGui::SFML::Shutdown();
-	return 0;
+	sf::VideoMode mode(1440, 900);
+
+	ProjectThree::GameApplication* gameApp = new ProjectThree::GameApplication(mode);
+	assert(NULL != gameApp && "main() Can't create Application");
+
+	gameApp->processArguments(argc, argv);
+
+	int exitCode = gameApp->run();
+
+	delete gameApp;
+	gameApp = NULL;	
+
+	return exitCode;
 }
