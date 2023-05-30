@@ -90,6 +90,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)\SourceLib\SFML\SFML 32\include;$(ProjectDir)\SourceLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -176,6 +177,7 @@
     <ClCompile Include="SourceLib\TinyXML\tinyxmlerror.cpp" />
     <ClCompile Include="SourceLib\TinyXML\tinyxmlparser.cpp" />
     <ClCompile Include="src\Anim.cpp" />
+    <ClCompile Include="src\Common.cpp" />
     <ClCompile Include="src\Entity_Mg.cpp" />
     <ClCompile Include="src\Explover.cpp" />
     <ClCompile Include="src\FileDialog.cpp" />
@@ -184,6 +186,7 @@
     <ClCompile Include="src\InputController.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Scripts_Mg.cpp" />
+    <ClCompile Include="src\Settings.cpp" />
     <ClCompile Include="src\WindowManager.cpp" />
     <ClCompile Include="src\TmxLevel.cpp" />
   </ItemGroup>
@@ -201,6 +204,7 @@
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\InputController.h" />
     <ClInclude Include="src\Object.h" />
+    <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\WindowManager.h" />
     <ClInclude Include="src\Script.h" />
     <ClInclude Include="src\Scripts_Mg.h" />

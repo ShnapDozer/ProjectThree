@@ -1,6 +1,6 @@
 #include "Scripts_Mg.h"
 
-namespace ProjectThree
+namespace pt
 {
 
 	std::shared_ptr<AnimManager> Scripts_Manager::Get_Anim_Manager(std::string name)

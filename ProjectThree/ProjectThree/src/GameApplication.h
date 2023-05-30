@@ -4,7 +4,7 @@
 
 #include "Object.h"
 
-namespace ProjectThree
+namespace pt
 {
 	#define StringList std::vector <std::string>
 	#define RenderWindowPtr std::shared_ptr<sf::RenderWindow>
@@ -24,7 +24,7 @@ namespace ProjectThree
 
 	public:
 
-		GameApplication(sf::VideoMode mode);
+		GameApplication(int argc, char* argv[]);
 
 		void processArguments(int argc, char* argv[]);
 		int run();
@@ -35,7 +35,6 @@ namespace ProjectThree
 
 	private:
 
-		void initSettingsConfig();
 		void initRenderer(sf::VideoMode mode);
 
 		void updateClock();

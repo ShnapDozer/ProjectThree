@@ -16,7 +16,7 @@
 #include "Script.h" 
 #include "Anim.h"
 
-namespace ProjectThree
+namespace pt
 {
 
 	class Scripts_Manager

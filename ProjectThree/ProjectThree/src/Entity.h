@@ -11,7 +11,7 @@
 #include "Anim.h"
 #include "Object.h"
 
-namespace ProjectThree
+namespace pt
 {
 
 	#define AnimManagerPtr std::shared_ptr<AnimManager> 

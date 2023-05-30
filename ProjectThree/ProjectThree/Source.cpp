@@ -4,11 +4,13 @@
 
 #include "src/GameApplication.h"
 
+#include "src/Settings.h"
+
+#include <iostream>
+
 int main(int argc, char* argv[])
 {
-	sf::VideoMode mode(1440, 900);
-
-	ProjectThree::GameApplication* gameApp = new ProjectThree::GameApplication(mode);
+	pt::GameApplication* gameApp = new pt::GameApplication(argc, argv);
 	assert(NULL != gameApp && "main() Can't create Application");
 
 	gameApp->processArguments(argc, argv);

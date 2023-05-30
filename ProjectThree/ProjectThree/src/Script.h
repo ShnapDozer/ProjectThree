@@ -11,7 +11,7 @@
 
 #include "Anim.h"
 
-namespace ProjectThree
+namespace pt
 {
 
 	class Script_Anim

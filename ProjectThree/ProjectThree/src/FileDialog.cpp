@@ -3,7 +3,7 @@
 #include <string>
 
 
-std::string ProjectThree::FileDialog::openFile(const char* filter, HWND owner)
+std::string pt::FileDialog::openFile(const char* filter, HWND owner)
 {
     OPENFILENAME ofn;
     char fileName[MAX_PATH] = "";

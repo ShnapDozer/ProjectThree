@@ -1,6 +1,6 @@
 #include "Entity_Mg.h"
 
-namespace ProjectThree
+namespace pt
 {
 
 	EntityManager::EntityManager(std::shared_ptr<Level_Manager> L_M, std::shared_ptr<Scripts_Manager> S_M)

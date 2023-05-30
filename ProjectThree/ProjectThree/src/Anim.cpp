@@ -2,7 +2,7 @@
 
 #include "Anim.h"
 
-namespace ProjectThree
+namespace pt
 {
 
 	//------------Animation Class:

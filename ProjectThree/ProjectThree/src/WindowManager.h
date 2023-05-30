@@ -15,7 +15,7 @@
 #include "Entity_Mg.h"
 #include "Entity.h" 
 
-namespace ProjectThree
+namespace pt
 {
 
 	class AnotherWindow

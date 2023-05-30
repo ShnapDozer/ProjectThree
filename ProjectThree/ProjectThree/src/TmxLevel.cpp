@@ -4,7 +4,9 @@
 #include <algorithm>
 #include "TinyXML2/tinyxml2.h"
 
-namespace ProjectThree
+#include "Common.h"
+
+namespace pt
 {
 
     using namespace tinyxml2;
@@ -132,31 +134,6 @@ namespace ProjectThree
         return polygon;
     }
 
-    // Parses hex-encoded RGB like "6d9fb9"
-    sf::Color ParseColor(const std::string& hexRGB)
-    {
-        char* pEnd = nullptr;
-        const long hexValue = strtol(hexRGB.c_str(), &pEnd, 16);
-        if (*pEnd != '\0')
-        {
-            throw std::runtime_error(hexRGB + " is not valid hex-encoded RGB color");
-        }
-
-        const uint8_t red = uint8_t((hexValue >> 16) % 256);
-        const uint8_t green = uint8_t((hexValue >> 8) % 256);
-        const uint8_t blue = uint8_t(hexValue % 256);
-
-        return sf::Color(red, green, blue);
-    }
-
-    float ParseFloat(const std::string& str)
-    {
-        char* pEnd = nullptr;
-        const float value = strtof(str.c_str(), &pEnd);
-
-        return value;
-    }
-
     int TmxObject::GetPropertyInt(const std::string& propertyName)
     {
         return std::stoi(properties[propertyName].c_str());
@@ -164,7 +141,7 @@ namespace ProjectThree
 
     float TmxObject::GetPropertyFloat(const std::string& propertyName)
     {
-        return ParseFloat(properties[propertyName].c_str());
+        return Common::ParseFloat(properties[propertyName].c_str());
     }
 
     std::string TmxObject::GetPropertyString(const std::string& propertyName)
@@ -227,7 +204,7 @@ namespace ProjectThree
         sf::Color matteColor = sf::Color(0, 0, 0, 0);
         if (image->Attribute("trans") != nullptr)
         {
-            matteColor = ParseColor(image->Attribute("trans"));
+            matteColor = Common::ParseColor(image->Attribute("trans"));
         }
 
         sf::Image img;
@@ -277,7 +254,7 @@ namespace ProjectThree
             //  or make layer opaque (255).
             if (layerElement->Attribute("opacity") != nullptr)
             {
-                float opacity = ParseFloat(layerElement->Attribute("opacity"));
+                float opacity = Common::ParseFloat(layerElement->Attribute("opacity"));
                 layer.opacity = sf::Uint8(255 * opacity);
             }
             else

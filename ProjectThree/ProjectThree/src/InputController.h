@@ -4,7 +4,7 @@
 
 #include "Object.h"
 
-namespace ProjectThree {
+namespace pt {
 
 	class InputController : public Object
 	{

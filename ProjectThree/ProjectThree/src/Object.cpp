@@ -1,18 +1,18 @@
 #include "Object.h"
 
 
-namespace ProjectThree {
+namespace pt {
 
-	ProjectThree::Object::Object(ObjectPtr parent)
+	pt::Object::Object(ObjectPtr parent)
 	{
 		_parent = parent;
 	}
 
-	ProjectThree::Object::~Object()
+	pt::Object::~Object()
 	{
 	}
 
-	ObjectPtr ProjectThree::Object::getParent()
+	ObjectPtr pt::Object::getParent()
 	{
 		return _parent;
 	}

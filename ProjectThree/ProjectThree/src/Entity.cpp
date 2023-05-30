@@ -4,7 +4,7 @@
 #include "WindowManager.h"
 #include "InputController.h"
 
-namespace ProjectThree
+namespace pt
 {
 
 	WorldObject::WorldObject(const std::string& name, const sf::Vector2f& startPosition) : _name(name), _position(startPosition)

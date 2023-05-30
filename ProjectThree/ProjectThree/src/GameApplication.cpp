@@ -21,18 +21,27 @@
 #include "Entity_Mg.h"
 #include "Explover.h" 
 #include "InputController.h"
+#include "Settings.h"
 
-namespace ProjectThree
+namespace pt
 {
 	RenderWindowPtr GameApplication::_mainWindow = nullptr;
 	UserInterfacePtr GameApplication::_userInterface = nullptr;
 	InputControllerPtr GameApplication::_inputController = nullptr;
 
-	GameApplication::GameApplication(sf::VideoMode mode) : Object()
+	GameApplication::GameApplication(int argc, char* argv[]) : Object()
 	{
 		_windowFocus = true;
 		_elapsedTime = 0;
 
+		processArguments(argc, argv);
+
+		Settings configFile;
+		configFile.openFile("configs/MainConfig.xml");
+
+		sf::VideoMode mode;
+		mode.height = configFile.getIntAttribute("mainWindow", "VideoModeHeight");
+		mode.width = configFile.getIntAttribute("mainWindow", "VideoModeWidth");
 		initRenderer(mode);
 
 		Levels_M = std::make_shared<Level_Manager>();
@@ -61,11 +70,6 @@ namespace ProjectThree
 	}
 
 	void GameApplication::processArguments(int argc, char* argv[])
-	{
-
-	}
-
-	void GameApplication::initSettingsConfig()
 	{
 
 	}
@@ -201,9 +205,4 @@ namespace ProjectThree
 	{
 		return _inputController;
 	}
-
-	
-
-	
-
 }

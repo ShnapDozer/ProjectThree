@@ -1,7 +1,7 @@
 #include "Explover.h"
 #include "TinyXML/tinyxml.h"
 
-namespace ProjectThree
+namespace pt
 {
 	std::string getName_Without(std::string name)
 	{

@@ -14,7 +14,7 @@ GetCurrentDirectory(MAX_PATH, workdir);
 Свойства Конфигурации => Дополнительно => Наборы Символов
 */
 
-namespace ProjectThree
+namespace pt
 {
 	class File
 	{

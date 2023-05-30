@@ -12,7 +12,7 @@
 #include "Anim.h"
 #include "Scripts_Mg.h"
 
-namespace ProjectThree
+namespace pt
 {
 
 	class EntityManager

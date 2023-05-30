@@ -29,7 +29,7 @@ namespace ImGui // Поддержка строк для GUI
 	}
 
 }
-namespace ProjectThree
+namespace pt
 {
 
 	// Static:

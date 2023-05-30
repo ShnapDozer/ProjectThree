@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-namespace ProjectThree {
+namespace pt {
 
 	#define ObjectPtr std::shared_ptr <Object>
 

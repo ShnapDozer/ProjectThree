@@ -7,7 +7,7 @@
 #include <SFML/Graphics.hpp>
 
 
-namespace ProjectThree
+namespace pt
 {
 	class Animation
 	{
