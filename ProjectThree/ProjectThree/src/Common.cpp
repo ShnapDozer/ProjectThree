@@ -1,6 +1,8 @@
 #include "Common.h"
 
 #include <sstream>
+#include <chrono>
+#include <thread>
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui-sfml.h"
@@ -48,7 +50,6 @@ std::vector<std::string> Common::MapToString(std::map<std::string, T> a)
 	}
 	return result;
 }
-
 
 sf::Color Common::ParseColor(const std::string& hexRGB)
 {

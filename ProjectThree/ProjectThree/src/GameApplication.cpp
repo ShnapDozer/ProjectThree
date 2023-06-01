@@ -66,6 +66,8 @@ namespace pt
 
 		_userInterface = std::make_shared<WindowManager>(Entity_M, Levels_M, Iso_Levels_EX, Scripts_M, Scripts_EX);
 
+		Common::startTimer(1000, this, &GameApplication::test);
+
 		srand(time(NULL));
 	}
 

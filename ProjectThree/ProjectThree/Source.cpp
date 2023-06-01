@@ -1,12 +1,8 @@
 #pragma once
 
 #include <assert.h>
-
 #include "src/GameApplication.h"
 
-#include "src/Settings.h"
-
-#include <iostream>
 
 int main(int argc, char* argv[])
 {
@@ -22,3 +18,6 @@ int main(int argc, char* argv[])
 
 	return exitCode;
 }
+
+
+

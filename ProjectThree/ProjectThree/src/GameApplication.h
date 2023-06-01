@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include<iostream>
+
 #include "Object.h"
 
 namespace pt
@@ -29,6 +31,10 @@ namespace pt
 		void processArguments(int argc, char* argv[]);
 		int run();
 
+		void test() {
+			std::cout << "Work!!!";
+		}
+
 		static RenderWindowPtr getRenderWindow();
 		static UserInterfacePtr getUserInterface();
 		static InputControllerPtr getInputController();
@@ -47,6 +53,8 @@ namespace pt
 		void draw();
 
 		void hideConsolWindow();
+
+		
 
 		static RenderWindowPtr _mainWindow;
 		static UserInterfacePtr _userInterface;
