@@ -13,21 +13,33 @@
 #include <Windows.h>
 #include <utility>
 
-#include "TMXLevel.h"
-#include "WindowManager.h"
-#include "Anim.h"
-#include "Scripts_Mg.h"
-#include "Entity.h"
-#include "Entity_Mg.h"
+#include<iostream>
+
+#include "Animation.h"
 #include "Explover.h" 
+#include "Entity.h"
+
+#include "EntityManager.h"
+#include "Scripts_Mg.h"
+#include "LevelManager.h"
+#include "WindowManager.h"
 #include "InputController.h"
+
 #include "Settings.h"
+
+
+
 
 namespace pt
 {
 	RenderWindowPtr GameApplication::_mainWindow = nullptr;
 	UserInterfacePtr GameApplication::_userInterface = nullptr;
 	InputControllerPtr GameApplication::_inputController = nullptr;
+	
+	AnimationManagerPtr GameApplication::_animationManager = nullptr;
+	EntityManagerPtr GameApplication::_entityManager = nullptr;
+	LevelManagerPtr GameApplication::_levelManager = nullptr;
+	ScriptManagerPtr GameApplication::_scriptManager = nullptr;
 
 	GameApplication::GameApplication(int argc, char* argv[]) : Object()
 	{
@@ -44,8 +56,8 @@ namespace pt
 		mode.width = configFile.getIntAttribute("mainWindow", "VideoModeWidth");
 		initRenderer(mode);
 
-		Levels_M = std::make_shared<Level_Manager>();
-		Levels_M->Add_Lvl("01", "Data/Levels/Isometric/01.tmx");
+		_levelManager = std::make_shared<LevelManager>();
+		_levelManager->addLevel("01", "Data/Levels/Isometric/01.tmx");
 
 
 		Iso_Levels_EX = std::make_shared<Ex>("\\Data\\Levels\\Isometric\\*", "Data/Levels/Isometric/");
@@ -55,18 +67,14 @@ namespace pt
 
 		_inputController = std::make_shared<InputController>();
 
-		Scripts_M = std::make_shared<Scripts_Manager>(*Scripts_EX);
+		_scriptManager = std::make_shared<Scripts_Manager>(*Scripts_EX);
+		_scriptManager->Read_Script_An(Scripts_EX->FileVec[2]);
 
-		Scripts_M->Read_Script_An(Scripts_EX->FileVec[2]);
+		_entityManager = std::make_shared<EntityManager>(_levelManager, _scriptManager);
 
-		Entity_M = std::make_shared<EntityManager>(Levels_M, Scripts_M);
+		_userInterface = std::make_shared<WindowManager>(_entityManager, _levelManager, Iso_Levels_EX, _scriptManager, Scripts_EX);
 
-		//hero = std::make_shared<Hero>("Hero"/*, Levels_M->Lvl_FirstObject("Hero_Play").poss*/);
-		//hero->AddAnim("Walk", "Data/Animation/H", 0.007, 8);
-
-		_userInterface = std::make_shared<WindowManager>(Entity_M, Levels_M, Iso_Levels_EX, Scripts_M, Scripts_EX);
-
-		Common::startTimer(1000, this, &GameApplication::test);
+		_updateConfigTimer.start(1000, this, &GameApplication::checkConfigFile);
 
 		srand(time(NULL));
 	}
@@ -76,14 +84,20 @@ namespace pt
 
 	}
 
+	void GameApplication::checkConfigFile()
+	{
+		std::cout << "Work!!!";
+	}
+
 	void GameApplication::initRenderer(sf::VideoMode mode)
 	{
 		_mainWindow = std::make_shared<sf::RenderWindow>(mode, "ProjectThree");
 		_mainWindow->setVerticalSyncEnabled(true);
 		_mainWindow->setKeyRepeatEnabled(false);
 
-		_windowIcon.loadFromFile("Data/icon.png");
-		_mainWindow->setIcon(32, 32, _windowIcon.getPixelsPtr());
+		sf::Image windowIcon;
+		windowIcon.loadFromFile("Data/icon.png");
+		_mainWindow->setIcon(32, 32, windowIcon.getPixelsPtr());
 
 		_mainView = std::make_shared<sf::View>();
 		_mainView->setCenter(0, 0);
@@ -135,7 +149,7 @@ namespace pt
 		_inputController->update();
 
 		if (_windowFocus) {
-			Entity_M->update(_elapsedTime);
+			_entityManager->update(_elapsedTime);
 			_userInterface->update(_mainWindow, _deltaClock);
 			_userInterface->Work();
 		}
@@ -145,19 +159,19 @@ namespace pt
 	{
 		sf::RenderTarget& target = *_mainWindow;
 
-		_mainView->setCenter(Entity_M->getHeroPosition());
+		_mainView->setCenter(_entityManager->getHeroPosition());
 
 		_mainWindow->clear();
 
 		_mainWindow->setView(*_mainView);
 
-		Levels_M->Draw_Lvl(target, _mouseCoordinate);
+		_levelManager->draw(target);
 
-		for (auto it : Levels_M->Lvl_Solid_Vec()) {
+		for (auto it : _levelManager->getGroupObjects("Solid")) {
 			it.draw(target, sf::Color::Blue);
 		}
 
-		Entity_M->draw(target);
+		_entityManager->draw(target);
 		_userInterface->Render(*_mainWindow);
 
 		_mainWindow->display();
@@ -198,6 +212,11 @@ namespace pt
 		return _mainWindow;
 	}
 
+	LevelManagerPtr GameApplication::getLevelManager()
+	{
+		return _levelManager;
+	}
+
 	UserInterfacePtr GameApplication::getUserInterface()
 	{
 		return _userInterface;
@@ -206,5 +225,17 @@ namespace pt
 	InputControllerPtr GameApplication::getInputController()
 	{
 		return _inputController;
+	}
+	ScriptManagerPtr GameApplication::getScriptManager()
+	{
+		return _scriptManager;
+	}
+	AnimationManagerPtr GameApplication::getAnimationManager()
+	{
+		return _animationManager;
+	}
+	EntityManagerPtr GameApplication::getEntityManager()
+	{
+		return _entityManager;
 	}
 }

@@ -12,7 +12,7 @@
 
 #include "Explover.h" 
 #include "Scripts_Mg.h"
-#include "Entity_Mg.h"
+#include "EntityManager.h"
 #include "Entity.h" 
 
 namespace pt
@@ -72,7 +72,7 @@ namespace pt
 	{
 	public:
 
-		L_Create_window(const std::string& N, ImVec2& S, ImVec2& P, std::shared_ptr <Level_Manager> L_M, std::shared_ptr <Ex> L)
+		L_Create_window(const std::string& N, ImVec2& S, ImVec2& P, std::shared_ptr <LevelManager> L_M, std::shared_ptr <Ex> L)
 			: AnotherWindow(N, S, P), LM(L_M), Levels(L) {}
 
 		void inWork() override;
@@ -80,7 +80,7 @@ namespace pt
 	private:
 
 		std::shared_ptr <Ex> Levels;
-		std::shared_ptr <Level_Manager> LM;
+		std::shared_ptr <LevelManager> LM;
 		std::string Name;
 		char nam[20] = { };
 	};
@@ -125,7 +125,7 @@ namespace pt
 	class WindowManager
 	{
 	public:
-		WindowManager(std::shared_ptr <EntityManager> E_MG,std::shared_ptr <Level_Manager> LM, std::shared_ptr <Ex> LvlF,
+		WindowManager(std::shared_ptr <EntityManager> E_MG,std::shared_ptr <LevelManager> LM, std::shared_ptr <Ex> LvlF,
 						std::shared_ptr <Scripts_Manager> Scr_M, std::shared_ptr <Ex> Scr_F);
 
 		void update(std::shared_ptr<sf::RenderWindow> window, sf::Clock& clock);

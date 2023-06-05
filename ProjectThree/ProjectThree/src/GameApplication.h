@@ -2,9 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include<iostream>
-
 #include "Object.h"
+#include "Timer.h"
 
 namespace pt
 {
@@ -12,12 +11,18 @@ namespace pt
 	#define RenderWindowPtr std::shared_ptr<sf::RenderWindow>
 	#define UserInterfacePtr std::shared_ptr<WindowManager>
 	#define InputControllerPtr std::shared_ptr<InputController>
+
+	#define AnimationManagerPtr std::shared_ptr<AnimationManager>
+	#define LevelManagerPtr std::shared_ptr<LevelManager>
+	#define EntityManagerPtr std::shared_ptr<EntityManager>
+	#define ScriptManagerPtr std::shared_ptr<Scripts_Manager>
 	
+	class AnimationManager;
 	class EntityManager;
 	class Ex;
 	class Hero;
 	class InputController;
-	class Level_Manager;
+	class LevelManager;
 	class Scripts_Manager;
 	class WindowManager;
 
@@ -31,15 +36,19 @@ namespace pt
 		void processArguments(int argc, char* argv[]);
 		int run();
 
-		void test() {
-			std::cout << "Work!!!";
-		}
-
 		static RenderWindowPtr getRenderWindow();
 		static UserInterfacePtr getUserInterface();
+
 		static InputControllerPtr getInputController();
 
+		static AnimationManagerPtr getAnimationManager();
+		static EntityManagerPtr getEntityManager();
+		static LevelManagerPtr getLevelManager();
+		static ScriptManagerPtr getScriptManager();
+		
 	private:
+
+		void checkConfigFile();
 
 		void initRenderer(sf::VideoMode mode);
 
@@ -54,30 +63,23 @@ namespace pt
 
 		void hideConsolWindow();
 
-		
-
 		static RenderWindowPtr _mainWindow;
 		static UserInterfacePtr _userInterface;
 		static InputControllerPtr _inputController;
+		
+		static AnimationManagerPtr _animationManager;
+		static EntityManagerPtr _entityManager;
+		static ScriptManagerPtr _scriptManager;
+		static LevelManagerPtr _levelManager;
 
+		std::shared_ptr<sf::View> _mainView;
+		
 		bool _windowFocus;
 		double _elapsedTime;
-
-		sf::Image _windowIcon;
-		std::shared_ptr<sf::View> _mainView;
-
+		
 		sf::Clock _clock;
 		sf::Clock _deltaClock;
-
-		sf::Vector2f _mouseCoordinate;
-		std::map <std::string, std::string> _levelsMap;
-
-		std::shared_ptr<Level_Manager>     Levels_M;
-		std::shared_ptr<EntityManager>    Entity_M;
-		std::shared_ptr<Scripts_Manager>  Scripts_M;
-		
-
-		std::shared_ptr<Hero> hero;
+		Timer<GameApplication> _updateConfigTimer;
 
 		std::shared_ptr<Ex>       Anim_EX;
 		std::shared_ptr<Ex> Iso_Levels_EX;

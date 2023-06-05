@@ -77,10 +77,10 @@ namespace pt
     {
         sf::VertexArray polygon(sf::Quads, 4);
 
-        polygon[0].position = Polygon.first;
-        polygon[1].position = Polygon.second;
-        polygon[3].position = Polygon.third;
-        polygon[2].position = Polygon.fourth;
+        polygon[0].position = _polygon.first;
+        polygon[1].position = _polygon.second;
+        polygon[3].position = _polygon.third;
+        polygon[2].position = _polygon.fourth;
 
         target.draw(polygon);
     }
@@ -163,7 +163,24 @@ namespace pt
         sprite.setPosition(position);
     }
 
-    bool TmxLevel::LoadFromFile(const std::string& filepath)
+    TmxLevel::TmxLevel()
+    {
+        mapWidth = 0;
+        mapHeight = 0;
+        tileWidth = 0;
+        tileHeight = 0;
+        mapFirstTileID = 0;
+
+        mapType = Type::non;
+        mapOrientation = "non";
+    }
+
+    TmxLevel::~TmxLevel()
+    {
+    }
+
+    // Загружает данные из TMX в память объекта.
+    bool TmxLevel::loadFromFile(const std::string& filepath)
     {
         XMLDocument levelFile;
 
@@ -174,27 +191,27 @@ namespace pt
         }
 
         // Element <map> should be root in TMX format.
-        XMLElement* map = levelFile.FirstChildElement("map");
+        XMLElement* map = levelFile.FirstChildElement("map"); 
         if (map == 0)
         {
             throw std::runtime_error("<map> element not found");
         }
 
-        m_layers.clear();
-        m_objects.clear();
+        _layers.clear();
+        _objectsMap.clear();
 
         // Map element example:
         //   <map version="1.0" orientation="orthogonal"
         //    width="10" height="10" tilewidth="34" tileheight="34">
-        m_orientation = std::string(map->Attribute("orientation"));
-        m_width = std::stoi(map->Attribute("width"));
-        m_height = std::stoi(map->Attribute("height"));
-        m_tileWidth = std::stoi(map->Attribute("tilewidth"));
-        m_tileHeight = std::stoi(map->Attribute("tileheight"));
+        mapOrientation = std::string(map->Attribute("orientation"));
+        mapWidth = std::stoi(map->Attribute("width"));
+        mapHeight = std::stoi(map->Attribute("height"));
+        tileWidth = std::stoi(map->Attribute("tilewidth"));
+        tileHeight = std::stoi(map->Attribute("tileheight"));
 
         // Retrieve tileset description and the first tile GID (Group Identifier).
         XMLElement* tilesetElement = map->FirstChildElement("tileset");
-        m_firstTileID = std::stoi(tilesetElement->Attribute("firstgid"));
+        mapFirstTileID = std::stoi(tilesetElement->Attribute("firstgid"));
 
         // <image> contains tileset texture
         XMLElement* image = tilesetElement->FirstChildElement("image");
@@ -218,13 +235,13 @@ namespace pt
         //  background filled with matte color.
         img.createMaskFromColor(matteColor);
         // Load texture from file.
-        m_tilesetImage.loadFromImage(img);
+        tilesetImage.loadFromImage(img);
         // Keep texture sharp when resized.
-        m_tilesetImage.setSmooth(false);
+        tilesetImage.setSmooth(false);
 
         // Retrieve amount of rows and columns in tileset.
-        const int columns = m_tilesetImage.getSize().x / m_tileWidth;
-        const int rows = m_tilesetImage.getSize().y / m_tileHeight;
+        const int columns = tilesetImage.getSize().x / tileWidth;
+        const int rows = tilesetImage.getSize().y / tileHeight;
 
         // Collect texture rects list.
         // Each texture rect is subimage in tileset image, i.e. single tile image.
@@ -234,10 +251,10 @@ namespace pt
             for (int x = 0; x < columns; x++)
             {
                 sf::IntRect rect;
-                rect.top = y * m_tileHeight;
-                rect.height = m_tileHeight;
-                rect.left = x * m_tileWidth;
-                rect.width = m_tileWidth;
+                rect.top = y * tileHeight;
+                rect.height = tileHeight;
+                rect.left = x * tileWidth;
+                rect.width = tileWidth;
                 subRects.push_back(rect);
             }
         }
@@ -282,47 +299,47 @@ namespace pt
             while (tileElement)
             {
                 const int tileGID = std::stoi(tileElement->Attribute("gid"));
-                const int subRectToUse = tileGID - m_firstTileID;
+                const int subRectToUse = tileGID - mapFirstTileID;
 
                 // Figure out texture rect for each tile.
                 if (subRectToUse >= 0)
                 {
                     sf::Sprite sprite;
-                    float cartX = static_cast<float>(x * m_tileWidth);
-                    float cartY = static_cast<float>(y * m_tileHeight);
+                    float cartX = static_cast<float>(x * tileWidth);
+                    float cartY = static_cast<float>(y * tileHeight);
 
-                    if (m_orientation == "orthogonal")
+                    if (mapOrientation == "orthogonal")
                     {
-                        m_type = Type::orthogonal;
-                        sprite.setTexture(m_tilesetImage);
+                        mapType = Type::orthogonal;
+                        sprite.setTexture(tilesetImage);
                         sprite.setTextureRect(subRects[subRectToUse]);
                         sprite.setPosition(cartX, cartY);
                         sprite.setColor(sf::Color(255, 255, 255, layer.opacity));
                     }
-                    else if (m_orientation == "isometric")
+                    else if (mapOrientation == "isometric")
                     {
-                        m_type = Type::isometric;
-                        float isoX = (cartX / 2) - cartY - (m_tileWidth / 2);
+                        mapType = Type::isometric;
+                        float isoX = (cartX / 2) - cartY - (tileWidth / 2);
                         float isoY = ((cartX / 2) + cartY) / 2;
-                        sprite.setTexture(m_tilesetImage);
+                        sprite.setTexture(tilesetImage);
                         sprite.setTextureRect(subRects[subRectToUse]);
                         sprite.setPosition(isoX, isoY);
                         sprite.setColor(sf::Color(255, 255, 255, layer.opacity));
                     }
-                    else if (m_orientation == "staggered")
+                    else if (mapOrientation == "staggered")
                     {
-                        float stragX = cartX + y % 2 * (m_tileWidth / 2);
-                        float stragY = y * (m_tileHeight / 2);
-                        m_type = Type::staggered;
-                        sprite.setTexture(m_tilesetImage);
+                        float stragX = cartX + y % 2 * (tileWidth / 2);
+                        float stragY = y * (tileHeight / 2);
+                        mapType = Type::staggered;
+                        sprite.setTexture(tilesetImage);
                         sprite.setTextureRect(subRects[subRectToUse]);
                         sprite.setPosition(cartX, cartY);
                         sprite.setColor(sf::Color(255, 255, 255, layer.opacity));
                     }
-                    else if (m_orientation == "hexagonal")
+                    else if (mapOrientation == "hexagonal")
                     {
                         std::cout << "It's not worked! (Hexagonal map not supported)" << std::endl;
-                        m_type = Type::hexagonal;
+                        mapType = Type::hexagonal;
                     }
                     else  std::cout << "Bad map. Orientation is not found" << std::endl;
 
@@ -332,18 +349,18 @@ namespace pt
                 tileElement = tileElement->NextSiblingElement("tile");
 
                 x++;
-                if (x >= m_width)
+                if (x >= mapWidth)
                 {
                     x = 0;
                     y++;
-                    if (y >= m_height)
+                    if (y >= mapHeight)
                     {
                         y = 0;
                     }
                 }
             }
 
-            m_layers.push_back(std::move(layer));
+            _layers.push_back(std::move(layer));
 
             layerElement = layerElement->NextSiblingElement("layer");
         }
@@ -357,24 +374,27 @@ namespace pt
         {
             XMLElement* objectGroupElement = map->FirstChildElement("objectgroup");
 
-
-
             while (objectGroupElement)
             {
 
-                std::string objectName;
+                std::string objectGroupName;
                 if (objectGroupElement->Attribute("name") != nullptr)
                 {
-                    objectName = objectGroupElement->Attribute("name");
+                    objectGroupName = objectGroupElement->Attribute("name");
                 }
 
                 // Enter into <object> node
                 XMLElement* objectElement;
                 objectElement = objectGroupElement->FirstChildElement("object");
-
                 while (objectElement)
                 {
                     // Collecting object properties - type, name, position, etc.
+
+                    std::string objectName;
+                    if (objectElement->Attribute("name") != nullptr)
+                    {
+                        objectName = objectElement->Attribute("name");
+                    }
 
                     std::string objectType;
                     if (objectElement->Attribute("type") != nullptr)
@@ -396,7 +416,7 @@ namespace pt
                     float height = 0;
 
                     sf::Sprite sprite;
-                    sprite.setTexture(m_tilesetImage);
+                    sprite.setTexture(tilesetImage);
                     sprite.setTextureRect(sf::IntRect(0, 0, 0, 0));
                     sprite.setPosition(x, y);
 
@@ -407,7 +427,7 @@ namespace pt
                     }
                     else if (objectElement->Attribute("gid") != nullptr)
                     {
-                        const size_t index = std::stoi(objectElement->Attribute("gid")) - m_firstTileID;
+                        const size_t index = std::stoi(objectElement->Attribute("gid")) - mapFirstTileID;
                         width = static_cast<float>(subRects[index].width);
                         height = static_cast<float>(subRects[index].height);
                         sprite.setTextureRect(subRects[index]);
@@ -416,18 +436,13 @@ namespace pt
 
                     // Define object
                     TmxObject object;
-                    object.name = objectName;
+                    object.name = objectName.empty() ? objectGroupName : objectName;
                     object.type = objectType;
                     object.sprite = sprite;
 
                     sf::FloatRect objectRect;
 
-
-
-
-
-                    switch (m_type)
-                    {
+                    switch (mapType) {
 
                     case Type::orthogonal:
                         objectRect.left = x;
@@ -436,7 +451,7 @@ namespace pt
                         objectRect.width = width;
 
                         object.rect = objectRect;
-                        object.poss = { object.rect.left, object.rect.top };
+                        object.possition = { object.rect.left, object.rect.top };
                         break;
 
                     case Type::isometric:
@@ -446,8 +461,8 @@ namespace pt
                         objectRect.height = height;
                         objectRect.width = width;
 
-                        object.Polygon = pixelRectToScreenPolygon(objectRect, m_tileWidth, m_tileHeight);
-                        object.poss = { object.Polygon.first.x, object.Polygon.first.y };
+                        object._polygon = pixelRectToScreenPolygon(objectRect, tileWidth, tileHeight);
+                        object.possition = { object._polygon.first.x, object._polygon.first.y };
                         break;
 
                     case Type::staggered:
@@ -466,12 +481,11 @@ namespace pt
 
                     }
 
-
-
                     // Read object properties
                     XMLElement* properties = objectElement->FirstChildElement("properties");
                     if (properties != nullptr)
                     {
+
                         XMLElement* prop = properties->FirstChildElement("property");
                         if (prop != nullptr)
                         {
@@ -488,10 +502,10 @@ namespace pt
                     }
 
                     // Add object to list
-                    m_objects.push_back(std::move(object));
-
+                    _objectsMap[objectGroupName].push_back(std::move(object));
                     objectElement = objectElement->NextSiblingElement("object");
                 }
+
                 objectGroupElement = objectGroupElement->NextSiblingElement("objectgroup");
             }
         }
@@ -503,64 +517,40 @@ namespace pt
         return true;
     }
 
-    TmxObject TmxLevel::GetFirstObject(const std::string& name) const
+    sf::Vector2i TmxLevel::getTileSize() const
     {
-        // Only first object with given name
-        for (size_t i = 0; i < m_objects.size(); i++)
-            if (m_objects[i].name == name)
-                return m_objects[i];
-        throw std::runtime_error("Object with name " + name + " was not found");
+        return sf::Vector2i(tileWidth, tileHeight);
     }
 
-    void TmxLevel::GetAllObjects(const std::string& name, std::vector<TmxObject>& Cont)
+    float TmxLevel::getTilemapWidth() const
     {
-        for (size_t i = 0; i < m_objects.size(); i++)
-        {
-            if (m_objects[i].name == name)
-            {
-                Cont.push_back(m_objects[i]);
-            }
-        }
+        return static_cast<float>(tileWidth * mapWidth);
     }
 
-    void TmxLevel::GetOtherObjects(const std::string& name, std::vector<TmxObject>& Cont)
+    float TmxLevel::getTilemapHeight() const
     {
-        for (size_t i = 0; i < m_objects.size(); i++)
-        {
-            if (m_objects[i].name != name)
-            {
-                Cont.push_back(m_objects[i]);
-            }
-        }
+        return static_cast<float>(tileHeight * mapHeight);
     }
 
-    sf::Vector2i TmxLevel::GetTileSize() const
+    sf::Vector2f TmxLevel::getTilemapSize() const
     {
-        return sf::Vector2i(m_tileWidth, m_tileHeight);
+        return sf::Vector2f(getTilemapWidth(), getTilemapHeight());
     }
 
-    float TmxLevel::GetTilemapWidth() const
+    std::map<std::string, std::vector<TmxObject>> TmxLevel::getObjectsMap() const
     {
-        return static_cast<float>(m_tileWidth * m_width);
+        return _objectsMap;
     }
 
-    float TmxLevel::GetTilemapHeight() const
-    {
-        return static_cast<float>(m_tileHeight * m_height);
-    }
-
-    sf::Vector2f TmxLevel::GetTilemapSize() const
-    {
-        return sf::Vector2f(GetTilemapWidth(), GetTilemapHeight());
-    }
-
-    void TmxLevel::Draw(sf::RenderTarget& target, sf::Vector2f MapPos) const
+    // Рисует все слои тайлов один за другим, но не рисует объекты (рисованием которых должна заниматься игра).
+    // Принимает любую цель для рисования, например, sf::RenderWindow.
+    void TmxLevel::draw(sf::RenderTarget& target) const
     {
         float Targ_x = target.getView().getCenter().x - target.getView().getSize().x / 2;
         float Targ_y = target.getView().getCenter().y - target.getView().getSize().y / 2;
         const sf::FloatRect viewportRect(Targ_x, Targ_y, target.getView().getSize().x, target.getView().getSize().y);
 
-        for (const auto& layer : m_layers)
+        for (const auto& layer : _layers)
         {
             for (const auto& tile : layer.tiles)
             {

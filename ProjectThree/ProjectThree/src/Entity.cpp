@@ -7,7 +7,8 @@
 namespace pt
 {
 
-	WorldObject::WorldObject(const std::string& name, const sf::Vector2f& startPosition) : _name(name), _position(startPosition)
+	WorldObject::WorldObject(const std::string& name, const sf::Vector2f& startPosition, ObjectPtr parent) 
+		: Object(parent), _name(name), _position(startPosition)
 	{
 		_collision = false;
 	}
@@ -41,7 +42,7 @@ namespace pt
 	{
 		for (auto it : solidObjects)
 		{ 
-			if (P_intersectRect(it.Polygon, this->getRect())) {
+			if (P_intersectRect(it._polygon, this->getRect())) {
 				return true;
 			}
 		}
@@ -60,17 +61,18 @@ namespace pt
 	}
 
 
-	Entity::Entity(const std::string& name, const sf::Vector2f& startPosition) : WorldObject(name, startPosition)
+	Entity::Entity(const std::string& name, const sf::Vector2f& startPosition, ObjectPtr parent)
+		: WorldObject(name, startPosition, parent)
 	{
 		_die = false;
 	}
 
-	void Entity::setAnimManager(const AnimManager& animManager)
+	void Entity::setAnimManager(const AnimationManager& animManager)
 	{
 		_animManager = animManager;
 	}
 
-	AnimManager Entity::getAnimManager() const
+	AnimationManager Entity::getAnimManager() const
 	{
 		return _animManager;
 	}
@@ -85,7 +87,8 @@ namespace pt
 		_animManager.draw(target, _position);
 	}
 
-	Hero::Hero(const std::string& name, const sf::Vector2f& startPosition) : Entity(name, startPosition) 
+	Hero::Hero(const std::string& name, const sf::Vector2f& startPosition, ObjectPtr parent) 
+		: Entity(name, startPosition, parent)
 	{
 		dx = 0;
 		dy = 0;

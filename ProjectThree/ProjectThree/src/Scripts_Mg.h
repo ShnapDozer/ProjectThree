@@ -14,7 +14,8 @@
 #include "TmxLevel.h"
 #include "Entity.h"
 #include "Script.h" 
-#include "Anim.h"
+
+#include "AnimationManager.h"
 
 namespace pt
 {
@@ -26,7 +27,7 @@ namespace pt
 		Scripts_Manager(Ex script)
 			:change_An(false), change_Di(false), change_St(false) {}
 
-		std::shared_ptr<AnimManager> Get_Anim_Manager(std::string name);
+		std::shared_ptr<AnimationManager> Get_Anim_Manager(std::string name);
 
 		std::shared_ptr<Script_Dial> Get_Dial_Script(std::string name);
 
@@ -41,7 +42,7 @@ namespace pt
 		~Scripts_Manager();
 
 	private:
-		std::map<std::string, std::shared_ptr<AnimManager>> Script_An;
+		std::map<std::string, std::shared_ptr<AnimationManager>> Script_An;
 		std::vector<std::shared_ptr<Script_Dial>> Script_Di;
 		std::vector<std::shared_ptr<Script_Stats>> Script_St;
 

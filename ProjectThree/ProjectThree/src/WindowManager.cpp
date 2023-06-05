@@ -258,7 +258,7 @@ namespace pt
 		}
 	}
 
-	WindowManager::WindowManager(std::shared_ptr <EntityManager> E_MG, std::shared_ptr < Level_Manager> LM, std::shared_ptr <Ex> LvlF,
+	WindowManager::WindowManager(std::shared_ptr <EntityManager> E_MG, std::shared_ptr < LevelManager> LM, std::shared_ptr <Ex> LvlF,
 									std::shared_ptr <Scripts_Manager> Scr_M, std::shared_ptr <Ex> Scr_F) 
 	{
 		focus = false;

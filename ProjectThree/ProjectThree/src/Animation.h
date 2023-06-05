@@ -5,36 +5,24 @@
 #include <vector>
 
 #include <SFML/Graphics.hpp>
+#include "Object.h"
 
 
 namespace pt
 {
-	class Animation
-	{
-
+	class Animation : public Object	{
 	public:
 
 
-		Animation();
-
-
-		Animation(std::string file, float speed, int frames); // speed 0.7 normal
-
+		Animation(ObjectPtr parent = nullptr);
+		Animation(std::string file, float speed, int frames, ObjectPtr parent = nullptr); // speed 0.7 normal
 
 		bool Load();
-
-
 		void ClearAnim();
-
-
 		void setSpeed(float speed);
-
-
 		void tik(float time);
 
-
 		sf::Texture* GetCurTexture();
-
 
 		int Frames;
 		std::string File = " ";
@@ -71,39 +59,5 @@ namespace pt
 
 		float CurFrame;
 		std::vector <sf::Texture> AnimTexture;
-	};
-
-	class AnimManager
-	{
-	public:
-
-		AnimManager(std::string name = "Test");
-
-		void create(std::string name, std::string file, float speed, int frames, bool loading = true);
-
-		void loadAnim(const std::vector<std::string>& NamesAnim);
-
-		void loadAllAnim();
-
-		void tick(float time);
-
-		void set(std::string name);
-
-		void setAnimList(const std::map<std::string, Animation>& Anims);
-
-		void setAnimSpeed(std::string name, float speed);
-
-
-		void draw(sf::RenderTarget& target, const sf::Vector2f& posA = { 0,0 }, float angle = 0);
-
-		sf::FloatRect GetRect() const;
-
-		std::string Name;
-		std::map<std::string, Animation> AnimList;
-
-	private:
-
-		sf::Sprite S;
-		std::string CurAnim;
 	};
 }

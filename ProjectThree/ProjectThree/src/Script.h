@@ -5,11 +5,10 @@
 #include <vector>
 #include <ctime>
 
-
 #include <SFML/Graphics.hpp>
 #include "TMXLevel.h"
 
-#include "Anim.h"
+#include "Animation.h"
 
 namespace pt
 {

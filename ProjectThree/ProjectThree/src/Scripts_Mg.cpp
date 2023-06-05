@@ -3,12 +3,12 @@
 namespace pt
 {
 
-	std::shared_ptr<AnimManager> Scripts_Manager::Get_Anim_Manager(std::string name)
+	std::shared_ptr<AnimationManager> Scripts_Manager::Get_Anim_Manager(std::string name)
 	{
 		auto i = Script_An.find(name);
 		if (i != Script_An.end())return i->second;
 		std::cout << name << " - is not find in Anim_Scripts" << std::endl;
-		return std::shared_ptr<AnimManager>();
+		return std::shared_ptr<AnimationManager>();
 	}
 
 	std::shared_ptr<Script_Dial> Scripts_Manager::Get_Dial_Script(std::string name)
@@ -47,12 +47,12 @@ namespace pt
 			element = doc.FirstChildElement("Animation");
 			objectel = element->FirstChildElement("Anim");
 
-			AnimManager AM;
+			AnimationManager AM;
 
 			if (objectel->Attribute("NameAM") != NULL)
 			{
 				NameAM_OLD = objectel->Attribute("NameAM");
-				AM.Name = NameAM_OLD;
+				AM._name= NameAM_OLD;
 			}
 			else std::cout << "First attribute in " << F.GetName() << " is not found! :(";
 
@@ -81,10 +81,10 @@ namespace pt
 
 				if (NameAM != NameAM_OLD)
 				{
-					Script_An[NameAM_OLD] = std::make_shared<AnimManager>(std::move(AM));
+					Script_An[NameAM_OLD] = std::make_shared<AnimationManager>(std::move(AM));
 					NameAM_OLD = NameAM;
 
-					AM.Name = NameAM_OLD;
+					AM._name = NameAM_OLD;
 					AM.create(Name, file_pic, speed / 10000, framov);
 				}
 				else
@@ -94,7 +94,7 @@ namespace pt
 
 				objectel = objectel->NextSiblingElement("Anim");
 			}
-			Script_An[NameAM_OLD] = std::make_shared<AnimManager>(std::move(AM));
+			Script_An[NameAM_OLD] = std::make_shared<AnimationManager>(std::move(AM));
 		}
 	}
 

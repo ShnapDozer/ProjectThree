@@ -8,13 +8,13 @@
 #include <SFML/Graphics.hpp>
 #include "TMXLevel.h"
 
-#include "Anim.h"
+#include "AnimationManager.h"
 #include "Object.h"
 
 namespace pt
 {
 
-	#define AnimManagerPtr std::shared_ptr<AnimManager> 
+	#define AnimManagerPtr std::shared_ptr<AnimationManager> 
 
 	enum class state
 	{
@@ -34,7 +34,7 @@ namespace pt
 	class WorldObject : public Object 
 	{
 	public:
-		WorldObject(const std::string& name,  const sf::Vector2f& startPosition = { 0.f,0.f });
+		WorldObject(const std::string& name,  const sf::Vector2f& startPosition = { 0.f,0.f }, ObjectPtr parent = nullptr);
 
 		std::string getName() const;
 		void setName(std::string name);
@@ -61,10 +61,10 @@ namespace pt
 	{
 	public:
 
-		Entity(const std::string& name, const sf::Vector2f& startPosition = { 0.f,0.f });
+		Entity(const std::string& name, const sf::Vector2f& startPosition = { 0.f,0.f }, ObjectPtr parent = nullptr);
 
-		void setAnimManager(const AnimManager& animManager);
-		AnimManager getAnimManager() const;
+		void setAnimManager(const AnimationManager& animManager);
+		AnimationManager getAnimManager() const;
 
 		void selectAnimation(const std::string &name);
 		void drawAnimation(sf::RenderTarget& target);
@@ -74,14 +74,14 @@ namespace pt
 	protected:
 
 		bool _die;		
-		AnimManager _animManager;
+		AnimationManager _animManager;
 	};
 
 	class Hero : public Entity
 	{
 	public:
 
-		Hero(const std::string& name, const sf::Vector2f& startPosition = { 0.f,0.f });
+		Hero(const std::string& name, const sf::Vector2f& startPosition = { 0.f,0.f }, ObjectPtr parent = nullptr);
 		void update(double time) override;
 
 	private:
@@ -98,8 +98,8 @@ namespace pt
 	class NPC : public Entity
 	{
 	public:
-		NPC(std::string name, const sf::Vector2f& posS = { 0,0 })
-			: Entity(name, posS), interaction(false) {}
+		NPC(std::string name, const sf::Vector2f& posS = { 0,0 }, ObjectPtr parent = nullptr)
+			: Entity(name, posS, parent), interaction(false) {}
 
 		void update(double time) override;
 

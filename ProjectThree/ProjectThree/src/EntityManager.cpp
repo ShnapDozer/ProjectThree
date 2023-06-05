@@ -1,39 +1,34 @@
-#include "Entity_Mg.h"
+#include "EntityManager.h"
+
+#include <iostream>
+#include <ctime>
+
+#include "AnimationManager.h"
+#include "EntityFactory.h"
+#include "LevelManager.h"
+#include "Scripts_Mg.h"
 
 namespace pt
 {
 
-	EntityManager::EntityManager(std::shared_ptr<Level_Manager> L_M, std::shared_ptr<Scripts_Manager> S_M)
-		: _levelManager(L_M), scriptManager(S_M)
+	EntityManager::EntityManager(LevelManagerPtr levelManager, ScriptManagerPtr scriptManager)
 	{
-		entityObjects = _levelManager->Lvl_Other_Vec();
-		_solidObjects = _levelManager->Lvl_Solid_Vec();
+		auto entityObjects = levelManager->getGroupObjects("Entity");
 
-		std::string Name, Param;
-
-		_entitys.resize(entityObjects.size() - 1);
-
-		int count = 0;
-
-		for (auto i : entityObjects)
-		{
-			Param = i.name.substr(0, i.name.find('_'));
-			Name = i.name.substr(i.name.find('_') + 1);
-
-			if (Param == "Hero")
-			{
-				_hero = std::make_shared<Hero>(Name, i.poss);
-				if (scriptManager->Get_Anim_Manager(Name) != NULL)
-				{
-					_hero->setAnimManager(*scriptManager->Get_Anim_Manager(Name));
+		for (auto &entityObject : entityObjects) {
+			auto entity = EntityFactory::createEntity(entityObject.type, entityObject.name, entityObject.possition, scriptManager);
+			
+			if (entity != nullptr) {
+				
+				if (entityObject.type == "Hero") {
+					_hero = std::static_pointer_cast<Hero>(entity);
+					_entitys.push_back(entity);
+				} else {
+					_entitys.push_back(std::move(entity));
 				}
-
+			} else { 
+				std::cout << entityObject.name << " - bad object" << std::endl;
 			}
-			else if (Param == "NPC")
-			{
-				_entitys[count++] = std::make_shared<NPC>(Name, i.poss);
-			}
-			else { std::cout << i.name << " - bad object" << std::endl; }
 		}
 	}
 
@@ -54,7 +49,7 @@ namespace pt
 		_hero->drawAnimation(Target);
 
 		for (auto entity : _entitys) {
-			if (entity != nullptr) {
+			if (entity) {
 				entity->drawAnimation(Target);
 			}
 		}
@@ -62,6 +57,7 @@ namespace pt
 
 	void EntityManager::setScript()
 	{
+		auto scriptManager = GameApplication::getScriptManager();
 		if (scriptManager->Get_Anim_Manager(_hero->getName()) != nullptr)
 		{
 			_hero->setAnimManager(*scriptManager->Get_Anim_Manager(_hero->getName()));
