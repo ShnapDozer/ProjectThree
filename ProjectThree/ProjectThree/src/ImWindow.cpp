@@ -1,8 +1,10 @@
-#include "WindowManager.h"
+#include "ImWindow.h"
 
-#include "FileDialog.h"
-#include "Common.h"
+#include <string>
+#include <vector>
+
 #include "GameApplication.h"
+#include "FileDialog.h"
 
 namespace ImGui // Поддержка строк для GUI
 {
@@ -29,30 +31,30 @@ namespace ImGui // Поддержка строк для GUI
 	}
 
 }
-namespace pt
+
+namespace pt 
 {
-
 	// Static:
-	bool AnotherWindow::show_F_LLFF_window = 0;
-	bool AnotherWindow::show_S_Video_window = 0;
-	bool AnotherWindow::show_A_Create_window = 0;
-	bool AnotherWindow::show_L_Create_window = 0;
-	bool AnotherWindow::show_Sc_Load_window = 0;
+	bool ImWindow::show_F_LLFF_window = 0;
+	bool ImWindow::show_S_Video_window = 0;
+	bool ImWindow::show_A_Create_window = 0;
+	bool ImWindow::show_L_Create_window = 0;
+	bool ImWindow::show_Sc_Load_window = 0;
 
 
-	AnotherWindow::AnotherWindow(const std::string& name, const ImVec2& size, const ImVec2& position) : _windowName(name), _windowSize(size), _windowPosition(position)
+	ImWindow::ImWindow(const std::string& name, const ImVec2& size, const ImVec2& position) : _windowName(name), _windowSize(size), _windowPosition(position)
 	{
 		_isShow = false;
 	}
 
-	MainWindow::MainWindow(const std::string& name, const ImVec2& size, const ImVec2& position) : AnotherWindow(name, size, position) 
+	MainWindow::MainWindow(const std::string& name, const ImVec2& size, const ImVec2& position) : ImWindow(name, size, position)
 	{
-	
+
 	}
 
 	void MainWindow::inWork()
 	{
-		//ImGui::Begin(_windowName.c_str(), &_isShow, ImGuiWindowFlags_MenuBar);
+		ImGui::Begin(_windowName.c_str(), &_isShow, ImGuiWindowFlags_MenuBar);
 		//ImGui::SetWindowSize(_windowSize);
 		//ImGui::SetWindowPos(_windowPosition);
 
@@ -135,7 +137,7 @@ namespace pt
 		ImGui::End();
 	}
 
-	A_Create_window::A_Create_window(const std::string& name, const ImVec2& size, const ImVec2& position) : AnotherWindow(name, size, position)
+	A_Create_window::A_Create_window(const std::string& name, const ImVec2& size, const ImVec2& position) : ImWindow(name, size, position)
 	{
 
 	}
@@ -190,7 +192,7 @@ namespace pt
 						}
 					}
 				}*/
-			//}
+				//}
 			ImGui::End();
 		}
 	}
@@ -235,8 +237,6 @@ namespace pt
 			ImGui::SetWindowSize(_windowSize);
 			ImGui::SetWindowPos(_windowPosition);
 
-			File File_S;
-
 			/*if (ImGui::ListBox("Chose XML file", &ChoiceTwo, Scripts_F->FileNamesVec)) {}
 			if (ChoiceTwo != -1)
 			{
@@ -257,62 +257,4 @@ namespace pt
 			ImGui::End();
 		}
 	}
-
-	WindowManager::WindowManager(std::shared_ptr <EntityManager> E_MG, std::shared_ptr < LevelManager> LM, std::shared_ptr <Ex> LvlF,
-									std::shared_ptr <Scripts_Manager> Scr_M, std::shared_ptr <Ex> Scr_F) 
-	{
-		focus = false;
-
-		auto window = GameApplication::getRenderWindow();
-
-		ImGui::SFML::Init(*window);
-		ConsMenuSize = { 300, float(window->getSize().y) };
-		ConsMenuPos = { float(window->getSize().x) - 300, 0 };
-
-		//All_Window.push_back(std::make_shared<MainWindow>("Main", ConsMenuSize, ConsMenuPos));
-		//All_Window.push_back(std::make_shared<A_Create_window>("Anim manager", AnothConsMenuSize, AnothConsMenuPos));
-		//All_Window.push_back(std::make_shared<L_Create_window>("Level manager", AnothConsMenuSize, AnothConsMenuPos, LM, LvlF));
-		//All_Window.push_back(std::make_shared<S_Video_window>("Video", AnothConsMenuSize, AnothConsMenuPos));
-		//All_Window.push_back(std::make_shared<Sc_Load_window>("Load Scripts", AnothConsMenuSize, AnothConsMenuPos, E_MG, Scr_M, Scr_F));
-	}
-
-	bool WindowManager::inFocus()
-	{
-		return focus;
-	}
-
-	void WindowManager::update(std::shared_ptr<sf::RenderWindow> window, sf::Clock& clock)
-	{
-		focus = ImGui::GetIO().WantCaptureMouse;
-		ImGui::SFML::Update(*window, clock.restart());
-	}
-
-	void WindowManager::ProcessEvent(const sf::Event& event)
-	{
-		ImGui::SFML::ProcessEvent(event);
-		switch (event.type)
-		{
-		case sf::Event::Resized: 
-			auto window = GameApplication::getRenderWindow();
-
-			ConsMenuSize.y = window->getSize().y;
-			ConsMenuPos.x = window->getSize().x - 300;
-			break;
-		}
-	}
-
-	void WindowManager::Work()
-	{
-		ImGui::StyleColorsLight();
-		for (auto it : All_Window) {
-			it->inWork();
-		}
-	}
-
-	void WindowManager::Render(sf::RenderWindow& Window) { 
-		ImGui::SFML::Render(Window); 
-	}
-
 }
-
-

@@ -1,32 +1,33 @@
 #pragma once
-#include <String> 
+#include <string> 
 #include <vector>
 
-#include "Entity.h"
 #include <SFML/Graphics.hpp>
-#include "GameApplication.h"
+
+#include "Defines.h"
+
 
 namespace pt
 {
+	class Entity;
+	class Hero;
+	class LevelManager;
 
 	class EntityManager
 	{
 	public:
 
-		EntityManager(LevelManagerPtr levelManager, ScriptManagerPtr scriptManager);
+		EntityManager(LevelManagerPtr levelManager);
 
 		void update(double time); 
 		void draw(sf::RenderTarget& Target);
-
-		void setScript();
 
 		std::shared_ptr<Hero> getHero();
 		sf::Vector2f getHeroPosition() const;
 
 	private:
 
-		std::shared_ptr<Hero> _hero;
-		std::vector<std::shared_ptr<Entity>> _entitys;
-		std::shared_ptr <LevelManager> _levelManager;
+		HeroPtr _hero;
+		std::vector<EntityPtr> _entitys;
 	};
 }

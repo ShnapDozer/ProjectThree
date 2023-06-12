@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -11,36 +11,25 @@
 
 
 namespace pt {
-	
 	class AnimationManager : public Object {
 	public:
+		AnimationManager(ObjectPtr parent = nullptr);
+		AnimationManager(const std::string& name, ObjectPtr parent = nullptr);
 
-		AnimationManager(const std::string& name = "Test", ObjectPtr parent = nullptr);
+		void addAnimation(const std::string& name, const std::vector<std::string>& fileNames, float speed);
+		void setAnimation(const std::string& name);
+		void setAnimationSpeed(const std::string& name, float speed);
 
-		void create(const std::string& name, const std::string& file, float speed, int frames, bool loading = true);
+		sf::FloatRect getSpriteRect() const;
 
-		void loadAnim(const std::vector<std::string>& animationNames);
-
-		void loadAllAnim();
-
-		void tick(float time);
-
-		void set(const std::string& name);
-
-		void setAnimList(const std::map<std::string, Animation>& animationMap);
-
-		void setAnimSpeed(const std::string& name, float speed);
-
-		void draw(sf::RenderTarget& target, const sf::Vector2f& posA = { 0,0 }, float angle = 0);
-
-		sf::FloatRect GetRect() const;
-
-		std::string _name;
-		std::map<std::string, Animation> _animList;
+		void update(float time);
+		void draw(sf::RenderTarget& target, const sf::Vector2f& possition = { 0,0 }, float angle = 0);
 
 	private:
+		std::string _name;
 		sf::Sprite _sprite;
 		std::string _currentAnimation;
+		std::unordered_map<std::string, Animation> _animMap;
 	};
 }
 

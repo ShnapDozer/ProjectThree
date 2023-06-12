@@ -1,9 +1,7 @@
 #pragma once
-#include <memory>
+#include "Defines.h"
 
 namespace pt {
-
-	#define ObjectPtr std::shared_ptr <Object>
 
 	class Object
 	{

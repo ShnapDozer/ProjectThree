@@ -7,8 +7,8 @@
 #include "Object.h"
 #include "TmxLevel.h"
 
-namespace pt {
-
+namespace pt 
+{
     class LevelManager : public Object {
     public:
 

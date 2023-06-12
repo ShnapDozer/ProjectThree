@@ -1,7 +1,6 @@
 #include "Entity.h"
 
 #include "GameApplication.h"
-#include "WindowManager.h"
 #include "InputController.h"
 
 namespace pt
@@ -79,7 +78,7 @@ namespace pt
 
 	void Entity::selectAnimation(const std::string &name)
 	{
-		_animManager.set(name);
+		_animManager.setAnimation(name);
 	}
 
 	void Entity::drawAnimation(sf::RenderTarget& target)
@@ -142,7 +141,7 @@ namespace pt
 			}
 		}
 
-		_animManager.tick(time);
+		_animManager.update(time);
 
 		//_collision = checkCollisionWithObjects(Solid_Vec);
 		_collision = false;
@@ -155,14 +154,14 @@ namespace pt
 	}
 	void NPC::update(double time)
 	{
-		_animManager.tick(time);
+		_animManager.update(time);
 
 		_collision = false; // checkCollisionWithObjects(Solid_Vec);
 
 		auto inputController = GameApplication::getInputController();
 		auto mousPosition = inputController->getMousPosition();
 
-		interaction = _animManager.GetRect().contains(mousPosition) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+		interaction = _animManager.getSpriteRect().contains(mousPosition) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
 
 		_position.x += dx * time;
 		_position.y += dy * time;

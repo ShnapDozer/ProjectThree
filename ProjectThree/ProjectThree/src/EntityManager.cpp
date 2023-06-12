@@ -1,22 +1,22 @@
 #include "EntityManager.h"
 
 #include <iostream>
-#include <ctime>
 
 #include "AnimationManager.h"
+#include "Entity.h"
 #include "EntityFactory.h"
+#include "GameApplication.h"
 #include "LevelManager.h"
-#include "Scripts_Mg.h"
 
 namespace pt
 {
 
-	EntityManager::EntityManager(LevelManagerPtr levelManager, ScriptManagerPtr scriptManager)
+	EntityManager::EntityManager(LevelManagerPtr levelManager)
 	{
 		auto entityObjects = levelManager->getGroupObjects("Entity");
 
 		for (auto &entityObject : entityObjects) {
-			auto entity = EntityFactory::createEntity(entityObject.type, entityObject.name, entityObject.possition, scriptManager);
+			auto entity = EntityFactory::createEntity(entityObject.type, entityObject.name, entityObject.possition);
 			
 			if (entity != nullptr) {
 				
@@ -51,23 +51,6 @@ namespace pt
 		for (auto entity : _entitys) {
 			if (entity) {
 				entity->drawAnimation(Target);
-			}
-		}
-	}
-
-	void EntityManager::setScript()
-	{
-		auto scriptManager = GameApplication::getScriptManager();
-		if (scriptManager->Get_Anim_Manager(_hero->getName()) != nullptr)
-		{
-			_hero->setAnimManager(*scriptManager->Get_Anim_Manager(_hero->getName()));
-		}
-
-		for (auto entity : _entitys)
-		{
-			if (scriptManager->Get_Anim_Manager(entity->getName()) != nullptr)
-			{
-				entity->setAnimManager(*scriptManager->Get_Anim_Manager(_hero->getName()));
 			}
 		}
 	}

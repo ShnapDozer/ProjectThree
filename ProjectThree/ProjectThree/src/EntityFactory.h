@@ -3,17 +3,17 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Entity.h"
 #include "Object.h"
-#include "GameApplication.h"
-
 
 namespace pt {
 
 	class Entity;
 
-	class EntityFactory {
+	class EntityFactory : public Object
+	{
 	public:
-		static std::shared_ptr<Entity> createEntity(const std::string& type, const std::string& name, sf::Vector2f possition, ScriptManagerPtr scriptManager);
+		static EntityPtr createEntity(const std::string& type, const std::string& name, sf::Vector2f possition);
 	};
 }
 

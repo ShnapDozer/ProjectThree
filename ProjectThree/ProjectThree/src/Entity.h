@@ -3,7 +3,6 @@
 #include <iostream>
 #include <String> 
 #include <vector>
-#include <ctime>
 
 #include <SFML/Graphics.hpp>
 #include "TMXLevel.h"
@@ -13,9 +12,6 @@
 
 namespace pt
 {
-
-	#define AnimManagerPtr std::shared_ptr<AnimationManager> 
-
 	enum class state
 	{
 		left,

@@ -1,22 +1,15 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <unordered_map>
+
+#include "Defines.h"
 
 #include "Object.h"
 #include "Timer.h"
 
 namespace pt
 {
-	#define StringList std::vector <std::string>
-	#define RenderWindowPtr std::shared_ptr<sf::RenderWindow>
-	#define UserInterfacePtr std::shared_ptr<WindowManager>
-	#define InputControllerPtr std::shared_ptr<InputController>
-
-	#define AnimationManagerPtr std::shared_ptr<AnimationManager>
-	#define LevelManagerPtr std::shared_ptr<LevelManager>
-	#define EntityManagerPtr std::shared_ptr<EntityManager>
-	#define ScriptManagerPtr std::shared_ptr<Scripts_Manager>
-	
 	class AnimationManager;
 	class EntityManager;
 	class Ex;
@@ -24,7 +17,7 @@ namespace pt
 	class InputController;
 	class LevelManager;
 	class Scripts_Manager;
-	class WindowManager;
+	class ImWindowManager;
 
 	class GameApplication : public Object
 	{
@@ -37,14 +30,15 @@ namespace pt
 		int run();
 
 		static RenderWindowPtr getRenderWindow();
-		static UserInterfacePtr getUserInterface();
+		static ImWindowsManagerPtr getImWindowsManager();
 
 		static InputControllerPtr getInputController();
 
-		static AnimationManagerPtr getAnimationManager();
+		static AnimationManagerPtr getAnimationManager(const std::string &name);
 		static EntityManagerPtr getEntityManager();
 		static LevelManagerPtr getLevelManager();
-		static ScriptManagerPtr getScriptManager();
+
+		static AnimationManagersMapPtr getAnimationManagersMap();
 		
 	private:
 
@@ -52,7 +46,6 @@ namespace pt
 
 		void initRenderer(sf::VideoMode mode);
 
-		void updateClock();
 		void processEvents();
 		void gameLoop();
 
@@ -64,21 +57,18 @@ namespace pt
 		void hideConsolWindow();
 
 		static RenderWindowPtr _mainWindow;
-		static UserInterfacePtr _userInterface;
+		static ImWindowsManagerPtr _imWindowsManager;
 		static InputControllerPtr _inputController;
 		
-		static AnimationManagerPtr _animationManager;
+		static AnimationManagersMapPtr _animationManagers;
 		static EntityManagerPtr _entityManager;
-		static ScriptManagerPtr _scriptManager;
 		static LevelManagerPtr _levelManager;
 
 		std::shared_ptr<sf::View> _mainView;
 		
 		bool _windowFocus;
-		double _elapsedTime;
 		
 		sf::Clock _clock;
-		sf::Clock _deltaClock;
 		Timer<GameApplication> _updateConfigTimer;
 
 		std::shared_ptr<Ex>       Anim_EX;

@@ -3,9 +3,8 @@
 
 namespace pt {
 
-	pt::Object::Object(ObjectPtr parent)
+	pt::Object::Object(ObjectPtr parent) : _parent(parent)
 	{
-		_parent = parent;
 	}
 
 	pt::Object::~Object()

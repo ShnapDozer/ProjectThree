@@ -7,13 +7,9 @@
 
 #include "SFML/Graphics.hpp"
 
-
-#include"GameApplication.h"
+#include "Defines.h"
 
 namespace Common {
-
-	#define StringList std::vector <std::string>
-
 	class AnimManager;
 
 	template <typename T>

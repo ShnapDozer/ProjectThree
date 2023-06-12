@@ -6,60 +6,48 @@ namespace pt
 {
 	Animation::Animation(ObjectPtr parent) : Object(parent)
 	{
-		isPlay = 0;
-		isLoad = 0;
-		CurFrame = 0;
-		Frames = 0;
+		_speed = 0;
+		_currentFrame = 0;
 	}
 
-	Animation::Animation(std::string file, float speed, int frames, ObjectPtr parent) : Object(parent)
+	Animation::Animation(const std::vector<std::string>& fileNames, float speed, ObjectPtr parent) : Object(parent)
 	{
-		Speed = speed;
-		Frames = frames;
-		File = file;
-		CurFrame = 0;
-	}
+		_speed = speed;
+		_currentFrame = 0;
 
-	bool Animation::Load()
-	{
-		if (File == " ")
-		{
-			std::cout << "File is empty! /t .|.";
-			return false;
+		if (fileNames.empty()) {
+			std::cout << "Animation: fileNames is empty! /t .|. /n";
+			return;
 		}
+
 		sf::Texture T;
-		for (int i = 0; i < Frames; i++)
-		{
-			T.loadFromFile(File + numList[i]);
-			AnimTexture.push_back(std::move(T));
+		for (auto fileName : fileNames) {
+			T.loadFromFile(fileName);
+			_textures.push_back(std::move(T));
 		}
-		isPlay = true;
-		isLoad = true;
-		if (AnimTexture.size() == Frames)return true;
-		else return false;
-
 	}
 
-
-	void Animation::ClearAnim()
+	void Animation::clear()
 	{
-		AnimTexture.clear();
-		isPlay = false;
-		isLoad = false;
+		_textures.clear();
 	}
 
-	void Animation::setSpeed(float speed) { Speed = speed / 100; }
-
-	void Animation::tik(float time)
-	{
-		if (!isPlay || !isLoad)return;
-		CurFrame += Speed * time;
-		if (CurFrame > Frames) CurFrame = 0;
+	void Animation::setSpeed(float speed) 
+	{ 
+		_speed = speed; 
 	}
 
-	sf::Texture* Animation::GetCurTexture()
+	void Animation::update(float time)
 	{
-		return &AnimTexture[CurFrame];
+		_currentFrame += _speed * time;
+		if (_currentFrame > _textures.size()) {
+			_currentFrame = 0;
+		}
+	}
+
+	const sf::Texture* Animation::getCurrentTexture()
+	{
+		return &_textures[_currentFrame];
 	}
 
 }

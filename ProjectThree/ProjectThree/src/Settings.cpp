@@ -2,7 +2,7 @@
 
 #include "Common.h"
 
-pt::Settings::Settings() 
+pt::Settings::Settings(const std::string& rootName, ObjectPtr parent) : _rootName(rootName), Object(parent)
 {
 
 }
@@ -45,6 +45,20 @@ int pt::Settings::getIntState(const std::string& pathToState, int defaultState) 
     return element->IntText();
 }
 
+StringList pt::Settings::childGroups(const std::string& path)
+{
+    const tinyxml2::XMLElement* element = findElementByPath(path);
+    //tinyxml2::XMLElement* element = doc.FirstChildElement();;
+    
+    StringList childs;
+    for (const tinyxml2::XMLElement* child = element->FirstChildElement(); child != NULL; child = child->NextSiblingElement())
+    {
+        childs.push_back(child->Value());
+    }
+
+    return childs;
+}
+
 std::string pt::Settings::getStrAttribute(const std::string& pathToState, const std::string& name, const std::string& defaultState) const
 {
     const tinyxml2::XMLElement* element = findElementByPath(pathToState);
@@ -78,7 +92,7 @@ int pt::Settings::getIntAttribute(const std::string& pathToState, const std::str
     return element->FindAttribute(name.c_str())->IntValue();
 }
 
-bool pt::Settings::openFile(std::string path)
+bool pt::Settings::openFile(const std::string& path)
 {
     _fileOpen = doc.LoadFile(path.c_str()) == tinyxml2::XML_SUCCESS;
 
@@ -90,7 +104,7 @@ bool pt::Settings::openFile(std::string path)
     return true;
 }
 
-bool pt::Settings::saveFile(std::string path)
+bool pt::Settings::saveFile(const std::string& path)
 {
     
     if (path.empty()) {

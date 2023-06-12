@@ -1,62 +1,50 @@
 #include "AnimationManager.h"
 
 namespace pt {
-	AnimationManager::AnimationManager(const std::string& name, ObjectPtr parent) : Object(parent)
+	AnimationManager::AnimationManager(ObjectPtr parent) : Object(parent)
+	{
+
+	}
+	AnimationManager::AnimationManager(const std::string& name, ObjectPtr parent) : _name(name), Object(parent)
 	{ 
-		_name = name; 
+		 
 	}
 
-	void AnimationManager::create(const std::string& name, const std::string& file, float speed, int frames, bool loading)
+	void AnimationManager::addAnimation(const std::string& name, const std::vector<std::string>& fileNames, float speed)
 	{
-		Animation Anim(file, speed, frames);
-		_animList[name] = std::move(Anim);
+		_animMap[name] = Animation(fileNames, speed);
 		_currentAnimation = name;
-		if (loading) { _animList[name].Load(); }
 	}
 
-	void AnimationManager::loadAnim(const std::vector<std::string>& NameAnim)
+	void AnimationManager::update(float time)
 	{
-
-	}
-
-	void AnimationManager::loadAllAnim()
-	{
-		for (auto it = _animList.begin(); it != _animList.end(); it++)
-		{
-			it->second.Load();
+		if (_animMap.find(_currentAnimation) == _animMap.end()) {
+			return;
 		}
+		_animMap[_currentAnimation].update(time);
 	}
 
-	void AnimationManager::tick(float time)
-	{
-		if (_animList.size() == 0) return;
-		_animList[_currentAnimation].tik(time);
-	}
-
-	void AnimationManager::set(const std::string& name)
+	void AnimationManager::setAnimation(const std::string& name)
 	{
 		_currentAnimation = name;
 	}
 
-	void AnimationManager::setAnimList(const std::map<std::string, Animation>& Anims)
+	void AnimationManager::setAnimationSpeed(const std::string& name, float speed)
 	{
-		if (!Anims.empty()) _animList = Anims;
-		else std::cout << "Anim manager: " << _name << " can't set! Empty  anim list! :(" << std::endl;
+		_animMap[name].setSpeed(speed);
 	}
 
-	void AnimationManager::setAnimSpeed(const std::string& name, float speed)
+	void AnimationManager::draw(sf::RenderTarget& target, const sf::Vector2f& possition, float angle)
 	{
-		_animList[name].setSpeed(speed);
-	}
+		
+		if (_animMap.find(_currentAnimation) == _animMap.end()) {
+			return;
+		}
 
-	void AnimationManager::draw(sf::RenderTarget& target, const sf::Vector2f& posA, float angle)
-	{
-		if (_animList.size() == 0 || !_animList[_currentAnimation].isLoad) return;
+		_sprite.setTexture(*_animMap[_currentAnimation].getCurrentTexture());
+		_sprite.setPosition(possition);
+
 		const sf::FloatRect viewportRect = target.getView().getViewport();
-
-		_sprite.setTexture(*_animList[_currentAnimation].GetCurTexture());
-		_sprite.setPosition(posA);
-
 		if (viewportRect.intersects(_sprite.getLocalBounds()))
 		{
 			_sprite.setOrigin(_sprite.getGlobalBounds().height / 2, _sprite.getGlobalBounds().width / 2);
@@ -65,7 +53,7 @@ namespace pt {
 		}
 	}
 
-	sf::FloatRect AnimationManager::GetRect() const 
+	sf::FloatRect AnimationManager::getSpriteRect() const 
 	{ 
 		return _sprite.getGlobalBounds(); 
 	}

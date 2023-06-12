@@ -185,36 +185,39 @@
     <ClCompile Include="src\FileDialog.cpp" />
     <ClCompile Include="src\GameApplication.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\ImWindow.cpp" />
     <ClCompile Include="src\InputController.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\Object.cpp" />
-    <ClCompile Include="src\Scripts_Mg.cpp" />
+    <ClCompile Include="src\LoadingManager.cpp" />
     <ClCompile Include="src\Settings.cpp" />
-    <ClCompile Include="src\WindowManager.cpp" />
+    <ClCompile Include="src\ImWindowFactory.cpp" />
+    <ClCompile Include="src\ImWindowManager.cpp" />
     <ClCompile Include="src\TmxLevel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="InputController.h" />
     <ClInclude Include="SourceLib\TinyXML2\tinyxml2.h" />
     <ClInclude Include="SourceLib\TinyXML\tinystr.h" />
     <ClInclude Include="SourceLib\TinyXML\tinyxml.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\AnimationManager.h" />
     <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\Defines.h" />
     <ClInclude Include="src\EntityFactory.h" />
     <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\Explover.h" />
     <ClInclude Include="src\FileDialog.h" />
     <ClInclude Include="src\GameApplication.h" />
     <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\ImWindow.h" />
     <ClInclude Include="src\InputController.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\Timer.h" />
-    <ClInclude Include="src\WindowManager.h" />
-    <ClInclude Include="src\Script.h" />
-    <ClInclude Include="src\Scripts_Mg.h" />
+    <ClInclude Include="src\ImWindowFactory.h" />
+    <ClInclude Include="src\ImWindowManager.h" />
+    <ClInclude Include="src\LoadingManager.h" />
     <ClInclude Include="src\TmxLevel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

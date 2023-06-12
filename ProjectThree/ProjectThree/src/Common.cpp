@@ -9,6 +9,7 @@
 
 
 
+
 void Common::PrintState(std::map<std::string, float> a)
 {
 	for (auto it = a.begin(); it != a.end(); ++it)

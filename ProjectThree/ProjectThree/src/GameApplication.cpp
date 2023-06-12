@@ -20,33 +20,31 @@
 #include "Entity.h"
 
 #include "EntityManager.h"
-#include "Scripts_Mg.h"
 #include "LevelManager.h"
-#include "WindowManager.h"
+#include "LoadingManager.h"
+#include "ImWindowManager.h"
 #include "InputController.h"
 
 #include "Settings.h"
 
-
-
-
 namespace pt
 {
 	RenderWindowPtr GameApplication::_mainWindow = nullptr;
-	UserInterfacePtr GameApplication::_userInterface = nullptr;
+	ImWindowsManagerPtr GameApplication::_imWindowsManager = nullptr;
 	InputControllerPtr GameApplication::_inputController = nullptr;
 	
-	AnimationManagerPtr GameApplication::_animationManager = nullptr;
 	EntityManagerPtr GameApplication::_entityManager = nullptr;
 	LevelManagerPtr GameApplication::_levelManager = nullptr;
-	ScriptManagerPtr GameApplication::_scriptManager = nullptr;
+
+	AnimationManagersMapPtr GameApplication::_animationManagers = nullptr;
 
 	GameApplication::GameApplication(int argc, char* argv[]) : Object()
 	{
 		_windowFocus = true;
-		_elapsedTime = 0;
 
 		processArguments(argc, argv);
+
+		_animationManagers = std::make_shared<std::unordered_map<std::string, std::shared_ptr<AnimationManager>>>();
 
 		Settings configFile;
 		configFile.openFile("configs/MainConfig.xml");
@@ -59,20 +57,18 @@ namespace pt
 		_levelManager = std::make_shared<LevelManager>();
 		_levelManager->addLevel("01", "Data/Levels/Isometric/01.tmx");
 
-
 		Iso_Levels_EX = std::make_shared<Ex>("\\Data\\Levels\\Isometric\\*", "Data/Levels/Isometric/");
 		Hex_Levels_EX = std::make_shared<Ex>("\\Data\\Levels\\Hex\\*", "Data/Levels/Hex/");
 		Ort_Levels_EX = std::make_shared<Ex>("\\Data\\Levels\\Ortogonal\\*", "Data/Levels/Ortogonal/");
 		Scripts_EX = std::make_shared<Ex>("\\Data\\Scripts\\*", "Data/Scripts/");
 
+		pt::LoadingManager::loadAnimation("configs/animations.xml");
+
 		_inputController = std::make_shared<InputController>();
 
-		_scriptManager = std::make_shared<Scripts_Manager>(*Scripts_EX);
-		_scriptManager->Read_Script_An(Scripts_EX->FileVec[2]);
+		_entityManager = std::make_shared<EntityManager>(_levelManager);
 
-		_entityManager = std::make_shared<EntityManager>(_levelManager, _scriptManager);
-
-		_userInterface = std::make_shared<WindowManager>(_entityManager, _levelManager, Iso_Levels_EX, _scriptManager, Scripts_EX);
+		_imWindowsManager = std::make_shared<ImWindowManager>("configs/windows.xml");
 
 		_updateConfigTimer.start(1000, this, &GameApplication::checkConfigFile);
 
@@ -103,19 +99,12 @@ namespace pt
 		_mainView->setCenter(0, 0);
 	}
 
-	void GameApplication::updateClock()
-	{
-		_elapsedTime = _clock.getElapsedTime().asMicroseconds();
-		_clock.restart();
-		_elapsedTime = _elapsedTime / 800;
-	}
-
 	void GameApplication::processEvents()
 	{
 		sf::Event event;
 		while (_mainWindow->pollEvent(event))
 		{
-			_userInterface->ProcessEvent(event);
+			_imWindowsManager->processEvent(event);
 			switch (event.type)
 			{
 			case sf::Event::Closed:
@@ -125,7 +114,7 @@ namespace pt
 
 				break;
 			case sf::Event::MouseWheelScrolled:
-				if (!_userInterface->inFocus()) {
+				if (!_imWindowsManager->inFocus()) {
 					if (event.mouseWheelScroll.delta > 0) { _mainView->zoom(0.75); }
 					if (event.mouseWheelScroll.delta < 0) { _mainView->zoom(1.35); }
 				}
@@ -143,15 +132,17 @@ namespace pt
 
 	void GameApplication::update()
 	{
-		this->updateClock();
+		sf::Time time = _clock.restart();
+		double elapsedTime = time.asMicroseconds() / 800;
+
 		this->processEvents();
 
 		_inputController->update();
 
 		if (_windowFocus) {
-			_entityManager->update(_elapsedTime);
-			_userInterface->update(_mainWindow, _deltaClock);
-			_userInterface->Work();
+			_entityManager->update(elapsedTime);
+			_imWindowsManager->update(time);
+			_imWindowsManager->work();
 		}
 	}
 
@@ -172,7 +163,7 @@ namespace pt
 		}
 
 		_entityManager->draw(target);
-		_userInterface->Render(*_mainWindow);
+		_imWindowsManager->draw();
 
 		_mainWindow->display();
 	}
@@ -217,22 +208,28 @@ namespace pt
 		return _levelManager;
 	}
 
-	UserInterfacePtr GameApplication::getUserInterface()
+	ImWindowsManagerPtr GameApplication::getImWindowsManager()
 	{
-		return _userInterface;
+		return _imWindowsManager;
 	}
 
 	InputControllerPtr GameApplication::getInputController()
 	{
 		return _inputController;
 	}
-	ScriptManagerPtr GameApplication::getScriptManager()
+
+	AnimationManagersMapPtr GameApplication::getAnimationManagersMap()
 	{
-		return _scriptManager;
+		return _animationManagers;
 	}
-	AnimationManagerPtr GameApplication::getAnimationManager()
+	AnimationManagerPtr GameApplication::getAnimationManager(const std::string& name)
 	{
-		return _animationManager;
+		if (_animationManagers->count(name)) {
+			return _animationManagers->at(name);
+		} else {
+			return AnimationManagerPtr();
+		}
+		
 	}
 	EntityManagerPtr GameApplication::getEntityManager()
 	{
