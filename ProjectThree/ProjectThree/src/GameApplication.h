@@ -1,7 +1,9 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
 #include <unordered_map>
+#include <variant>
+
+#include <SFML/Graphics.hpp>
 
 #include "Defines.h"
 
@@ -29,6 +31,10 @@ namespace pt
 		void processArguments(int argc, char* argv[]);
 		int run();
 
+
+		static std::variant<int, double, std::string> getConstant(const std::string& key);
+		static void setConstant(const std::string& key, std::variant<int, double, std::string> value);
+
 		static RenderWindowPtr getRenderWindow();
 		static ImWindowsManagerPtr getImWindowsManager();
 
@@ -44,7 +50,7 @@ namespace pt
 
 		void checkConfigFile();
 
-		void initRenderer(sf::VideoMode mode);
+		void initRenderer();
 
 		void processEvents();
 		void gameLoop();
@@ -55,6 +61,8 @@ namespace pt
 		void draw();
 
 		void hideConsolWindow();
+
+		static std::unordered_map<std::string, std::variant<int, double, std::string>> _constantMap;
 
 		static RenderWindowPtr _mainWindow;
 		static ImWindowsManagerPtr _imWindowsManager;

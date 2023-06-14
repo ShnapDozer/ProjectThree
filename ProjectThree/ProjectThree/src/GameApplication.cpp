@@ -38,21 +38,19 @@ namespace pt
 
 	AnimationManagersMapPtr GameApplication::_animationManagers = nullptr;
 
-	GameApplication::GameApplication(int argc, char* argv[]) : Object()
+	std::unordered_map<std::string, std::variant<int, double, std::string>>  GameApplication::_constantMap;
+
+	GameApplication::GameApplication(int argc, char* argv[]) : _windowFocus(true), Object()
 	{
-		_windowFocus = true;
+		this->setConstant("AppConfig", "configs/applicationConfig.xml");
+		this->setConstant("AnimationsConfig", "configs/animations.xml");
+		this->setConstant("WindowsConfig", "configs/windows.xml");
 
 		processArguments(argc, argv);
 
 		_animationManagers = std::make_shared<std::unordered_map<std::string, std::shared_ptr<AnimationManager>>>();
 
-		Settings configFile;
-		configFile.openFile("configs/MainConfig.xml");
-
-		sf::VideoMode mode;
-		mode.height = configFile.getIntAttribute("mainWindow", "VideoModeHeight");
-		mode.width = configFile.getIntAttribute("mainWindow", "VideoModeWidth");
-		initRenderer(mode);
+		this->initRenderer();
 
 		_levelManager = std::make_shared<LevelManager>();
 		_levelManager->addLevel("01", "Data/Levels/Isometric/01.tmx");
@@ -62,13 +60,15 @@ namespace pt
 		Ort_Levels_EX = std::make_shared<Ex>("\\Data\\Levels\\Ortogonal\\*", "Data/Levels/Ortogonal/");
 		Scripts_EX = std::make_shared<Ex>("\\Data\\Scripts\\*", "Data/Scripts/");
 
-		pt::LoadingManager::loadAnimation("configs/animations.xml");
+		const std::string animationConfigPath = std::get<std::string>(getConstant("AnimationsConfig"));
+		pt::LoadingManager::loadAnimation(animationConfigPath);
 
 		_inputController = std::make_shared<InputController>();
 
 		_entityManager = std::make_shared<EntityManager>(_levelManager);
 
-		_imWindowsManager = std::make_shared<ImWindowManager>("configs/windows.xml");
+		_imWindowsManager = std::make_shared<ImWindowManager>();
+		_imWindowsManager->showWindow("MainWindow");
 
 		_updateConfigTimer.start(1000, this, &GameApplication::checkConfigFile);
 
@@ -85,8 +85,19 @@ namespace pt
 		std::cout << "Work!!!";
 	}
 
-	void GameApplication::initRenderer(sf::VideoMode mode)
+	void GameApplication::initRenderer()
 	{
+		Settings configFile;
+		const std::string appConfigPath = std::get<std::string>(getConstant("AppConfig"));
+		configFile.openFile(appConfigPath);
+
+		sf::VideoMode mode;
+		mode.height = configFile.getIntAttribute("mainWindow", "VideoModeHeight");
+		mode.width = configFile.getIntAttribute("mainWindow", "VideoModeWidth");
+
+		this->setConstant("VideoModeHeight", (int)mode.height);
+		this->setConstant("VideoModeWidth", (int)mode.width);
+
 		_mainWindow = std::make_shared<sf::RenderWindow>(mode, "ProjectThree");
 		_mainWindow->setVerticalSyncEnabled(true);
 		_mainWindow->setKeyRepeatEnabled(false);
@@ -196,6 +207,21 @@ namespace pt
 		this->cleanup();
 
 		return 0;
+	}
+
+	std::variant<int, double, std::string> GameApplication::getConstant(const std::string& key)
+	{
+		auto constant = _constantMap.find(key);
+		if (constant != _constantMap.end()) {
+			return constant->second;
+		}
+
+		return std::variant<int, double, std::string>();
+	}
+
+	void GameApplication::setConstant(const std::string& key, std::variant<int, double, std::string> value)
+	{
+		_constantMap[key] = value;
 	}
 
 	RenderWindowPtr GameApplication::getRenderWindow()

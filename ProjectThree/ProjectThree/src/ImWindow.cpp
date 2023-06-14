@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "GameApplication.h"
+#include "ImWindowManager.h"
 #include "FileDialog.h"
 
 namespace ImGui // Поддержка строк для GUI
@@ -34,27 +35,31 @@ namespace ImGui // Поддержка строк для GUI
 
 namespace pt 
 {
-	// Static:
-	bool ImWindow::show_F_LLFF_window = 0;
-	bool ImWindow::show_S_Video_window = 0;
-	bool ImWindow::show_A_Create_window = 0;
-	bool ImWindow::show_L_Create_window = 0;
-	bool ImWindow::show_Sc_Load_window = 0;
 
-
-	ImWindow::ImWindow(const std::string& name, const ImVec2& size, const ImVec2& position) : _windowName(name), _windowSize(size), _windowPosition(position)
+	ImWindow::ImWindow(size_t id, const std::string& name, const ImVec2& size, const ImVec2& position)
+		: _id(id), _name(name), _windowSize(size), _windowPosition(position), _show(true)
 	{
-		_isShow = false;
+		
 	}
 
-	MainWindow::MainWindow(const std::string& name, const ImVec2& size, const ImVec2& position) : ImWindow(name, size, position)
+	void ImWindow::show()
+	{
+		_show = true;
+	}
+
+	void ImWindow::minimize()
+	{
+		_show = false;
+	}
+
+	MainWindow::MainWindow(size_t id, const std::string& name, const ImVec2& size, const ImVec2& position) : ImWindow(id, name, size, position)
 	{
 
 	}
 
 	void MainWindow::inWork()
 	{
-		ImGui::Begin(_windowName.c_str(), &_isShow, ImGuiWindowFlags_MenuBar);
+		ImGui::Begin(_name.c_str(), &_show, ImGuiWindowFlags_MenuBar);
 		//ImGui::SetWindowSize(_windowSize);
 		//ImGui::SetWindowPos(_windowPosition);
 
@@ -115,20 +120,29 @@ namespace pt
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("Load Level From File")) { show_F_LLFF_window = true; }
-				if (ImGui::MenuItem("Load Script")) { show_Sc_Load_window = true; }//Read(ALL_Anim_Manager); }
-				if (ImGui::MenuItem("Save")) { FileDialog::openFile("All Files (*.*)\0*.*\0", GameApplication::getRenderWindow()->getSystemHandle()); }//Save(ALL_Anim_Manager); }
+				if (ImGui::MenuItem("Load Level From File")) { 
+					GameApplication::getImWindowsManager()->showWindow("LoadLevelFromFile");
+				}
+				if (ImGui::MenuItem("Save")) { 
+					
+				}//Save(ALL_Anim_Manager); }
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Settings"))
 			{
-				if (ImGui::MenuItem("Video")) { show_S_Video_window = true; }
+				if (ImGui::MenuItem("Video")) { 
+					GameApplication::getImWindowsManager()->showWindow("VideoSettings");
+				}
 				ImGui::EndMenu();
 			}
-			if (ImGui::BeginMenu("Create"))
+			if (ImGui::BeginMenu("Add"))
 			{
-				if (ImGui::MenuItem("Animation")) { show_A_Create_window = true; }
-				if (ImGui::MenuItem("Level")) { show_L_Create_window = true; }
+				if (ImGui::MenuItem("Animation")) { 
+					GameApplication::getImWindowsManager()->showWindow("AddAnimation");
+				}
+				if (ImGui::MenuItem("Level")) { 
+					GameApplication::getImWindowsManager()->showWindow("AddLevel");
+				}
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenuBar();
@@ -137,124 +151,124 @@ namespace pt
 		ImGui::End();
 	}
 
-	A_Create_window::A_Create_window(const std::string& name, const ImVec2& size, const ImVec2& position) : ImWindow(name, size, position)
-	{
+	//A_Create_window::A_Create_window(const std::string& name, const ImVec2& size, const ImVec2& position) : ImWindow(name, size, position)
+	//{
 
-	}
+	//}
 
-	void A_Create_window::inWork()
-	{
-		if (show_A_Create_window)//Вверхее меню вызыв окна
-		{
-			ImGui::Begin("Create Animation", &show_A_Create_window);
-			ImGui::SetWindowSize(_windowSize);
-			ImGui::SetWindowPos(_windowPosition);
+	//void A_Create_window::inWork()
+	//{
+	//	if (show_A_Create_window)//Вверхее меню вызыв окна
+	//	{
+	//		ImGui::Begin("Create Animation", &show_A_Create_window);
+	//		ImGui::SetWindowSize(_windowSize);
+	//		ImGui::SetWindowPos(_windowPosition);
 
-			if (ImGui::CollapsingHeader("Create Anim Manager")) {
+	//		if (ImGui::CollapsingHeader("Create Anim Manager")) {
 
-				/*ImGui::InputText("New Anim Manager", nam, 20);
-				if (ImGui::Button("Create")) {
+	//			/*ImGui::InputText("New Anim Manager", nam, 20);
+	//			if (ImGui::Button("Create")) {
 
-					if (checNameAnim(Entity::GetMembers(), nam)) {
-						ImGui::Text("Xyu!!!");
-					}
-					else {
-						AnimManager A(nam);
-						ALL_Anim_Manager.push_back(A);
-					}
-				}*/
-			}
-			//if (Entity::GetMembers().size() != 0) {
-				/*std::vector <std::string> a(Common::MapToString(Entity::GetMembers()));
-				if (ImGui::ListBox("Chose Anim Manager", &ChoiceOne, a)) {}
-				if (ChoiceOne != -1)
-				{
-					if (ImGui::ListBox("Chose first frame your Anim", &ChoiceTwo, Anim->FileNamesVec))
-					{
-						strcpy_s(nam, Anim->FileVec[ChoiceTwo].name_Without.c_str());
-					}
-					if (ChoiceTwo != -1)
-					{
-						ImGui::Text("File:");
+	//				if (checNameAnim(Entity::GetMembers(), nam)) {
+	//					ImGui::Text("Xyu!!!");
+	//				}
+	//				else {
+	//					AnimManager A(nam);
+	//					ALL_Anim_Manager.push_back(A);
+	//				}
+	//			}*/
+	//		}
+	//		//if (Entity::GetMembers().size() != 0) {
+	//			/*std::vector <std::string> a(Common::MapToString(Entity::GetMembers()));
+	//			if (ImGui::ListBox("Chose Anim Manager", &ChoiceOne, a)) {}
+	//			if (ChoiceOne != -1)
+	//			{
+	//				if (ImGui::ListBox("Chose first frame your Anim", &ChoiceTwo, Anim->FileNamesVec))
+	//				{
+	//					strcpy_s(nam, Anim->FileVec[ChoiceTwo].name_Without.c_str());
+	//				}
+	//				if (ChoiceTwo != -1)
+	//				{
+	//					ImGui::Text("File:");
 
-						ImGui::Text(Anim->FileVec[ChoiceTwo].name.c_str());
+	//					ImGui::Text(Anim->FileVec[ChoiceTwo].name.c_str());
 
-						ImGui::InputText("Name", nam, 20);
-						ImGui::SliderInt("Frames", &Frames, 1, 20);
-						ImGui::SliderFloat("Speed", &Speed, 0, 1);
-						if (ImGui::Button("Create!"))
-						{
-							Entity::GetMembers()[a[ChoiceOne]]->create(nam, Anim->FileVec[ChoiceTwo].GetWayToPic(5), Speed, Frames, true);
-							ChoiceOne = -1;
-							ChoiceTwo = -1;
-							Speed = 0;
-							Frames = 1;
-						}
-					}
-				}*/
-				//}
-			ImGui::End();
-		}
-	}
+	//					ImGui::InputText("Name", nam, 20);
+	//					ImGui::SliderInt("Frames", &Frames, 1, 20);
+	//					ImGui::SliderFloat("Speed", &Speed, 0, 1);
+	//					if (ImGui::Button("Create!"))
+	//					{
+	//						Entity::GetMembers()[a[ChoiceOne]]->create(nam, Anim->FileVec[ChoiceTwo].GetWayToPic(5), Speed, Frames, true);
+	//						ChoiceOne = -1;
+	//						ChoiceTwo = -1;
+	//						Speed = 0;
+	//						Frames = 1;
+	//					}
+	//				}
+	//			}*/
+	//			//}
+	//		ImGui::End();
+	//	}
+	//}
 
-	void L_Create_window::inWork()
-	{
-		if (show_L_Create_window)//Вверхее меню вызыв окна
-		{
-			ImGui::Begin("Create Level", &show_L_Create_window);
-			ImGui::SetWindowSize(_windowSize);
-			ImGui::SetWindowPos(_windowPosition);
+	//void L_Create_window::inWork()
+	//{
+	//	if (show_L_Create_window)//Вверхее меню вызыв окна
+	//	{
+	//		ImGui::Begin("Create Level", &show_L_Create_window);
+	//		ImGui::SetWindowSize(_windowSize);
+	//		ImGui::SetWindowPos(_windowPosition);
 
-			/*if (ImGui::ListBox("Chose XML file", &ChoiceTwo, Levels->FileNamesVec))
-			{
-				strcpy_s(nam, Levels->FileVec[ChoiceTwo].name_Without.c_str());
-			}
-			if (ChoiceTwo != -1)
-			{
-				ImGui::Text("File:");
+	//		/*if (ImGui::ListBox("Chose XML file", &ChoiceTwo, Levels->FileNamesVec))
+	//		{
+	//			strcpy_s(nam, Levels->FileVec[ChoiceTwo].name_Without.c_str());
+	//		}
+	//		if (ChoiceTwo != -1)
+	//		{
+	//			ImGui::Text("File:");
 
-				ImGui::Text(Levels->FileVec[ChoiceTwo].name.c_str());
+	//			ImGui::Text(Levels->FileVec[ChoiceTwo].name.c_str());
 
-				ImGui::InputText("Name", nam, 20);
-				if (ImGui::Button("Create!"))
-				{
-					LM->Add_Lvl(nam, Levels->FileVec[ChoiceTwo].GetWay());
-					ChoiceOne = -1;
-					ChoiceTwo = -1;
-				}
-			}*/
+	//			ImGui::InputText("Name", nam, 20);
+	//			if (ImGui::Button("Create!"))
+	//			{
+	//				LM->Add_Lvl(nam, Levels->FileVec[ChoiceTwo].GetWay());
+	//				ChoiceOne = -1;
+	//				ChoiceTwo = -1;
+	//			}
+	//		}*/
 
-			ImGui::End();
-		}
-	}
+	//		ImGui::End();
+	//	}
+	//}
 
-	void Sc_Load_window::inWork()
-	{
-		if (show_Sc_Load_window)
-		{
+	//void Sc_Load_window::inWork()
+	//{
+	//	if (show_Sc_Load_window)
+	//	{
 
-			ImGui::Begin("Load script", &show_Sc_Load_window);
-			ImGui::SetWindowSize(_windowSize);
-			ImGui::SetWindowPos(_windowPosition);
+	//		ImGui::Begin("Load script", &show_Sc_Load_window);
+	//		ImGui::SetWindowSize(_windowSize);
+	//		ImGui::SetWindowPos(_windowPosition);
 
-			/*if (ImGui::ListBox("Chose XML file", &ChoiceTwo, Scripts_F->FileNamesVec)) {}
-			if (ChoiceTwo != -1)
-			{
-				File_S = Scripts_F->FileVec[ChoiceTwo];
+	//		/*if (ImGui::ListBox("Chose XML file", &ChoiceTwo, Scripts_F->FileNamesVec)) {}
+	//		if (ChoiceTwo != -1)
+	//		{
+	//			File_S = Scripts_F->FileVec[ChoiceTwo];
 
-				ImGui::Text("File:");
+	//			ImGui::Text("File:");
 
-				ImGui::Text(Scripts_F->FileVec[ChoiceTwo].name.c_str());
+	//			ImGui::Text(Scripts_F->FileVec[ChoiceTwo].name.c_str());
 
-				if (ImGui::Button("Load"))
-				{
-					Scr_MG->Read_Script_An(File_S);
-					Ent_MG->SetScript();
-					ChoiceOne = -1;
-					ChoiceTwo = -1;
-				}
-			}*/
-			ImGui::End();
-		}
-	}
+	//			if (ImGui::Button("Load"))
+	//			{
+	//				Scr_MG->Read_Script_An(File_S);
+	//				Ent_MG->SetScript();
+	//				ChoiceOne = -1;
+	//				ChoiceTwo = -1;
+	//			}
+	//		}*/
+	//		ImGui::End();
+	//	}
+	//}
 }

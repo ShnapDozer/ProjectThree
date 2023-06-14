@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "Defines.h"
 
 #include "ImWindow.h"
@@ -10,7 +12,7 @@ namespace pt
 	class ImWindowManager : public Object
 	{
 	public:
-		ImWindowManager(const std::string& configPath, ObjectPtr parent = nullptr);
+		ImWindowManager(ObjectPtr parent = nullptr);
 
 		void processEvent(const sf::Event& event);
 
@@ -20,7 +22,13 @@ namespace pt
 
 		bool inFocus();
 
+		void showWindow(const std::string& windowName);
+		void closeWindow(size_t id);
+
 	private:
-		std::vector<ImWindowPtr> windows;
+		bool focus;
+		static size_t _id;
+
+		std::unordered_map<size_t, ImWindowPtr> windows;
 	};
 }

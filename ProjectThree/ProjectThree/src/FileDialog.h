@@ -3,6 +3,9 @@
 #include <string>
 #include <Windows.h>
 
+
+// FileDialog::openFile("All Files (*.*)\0*.*\0", GameApplication::getRenderWindow()->getSystemHandle()); 
+
 namespace pt {
 	class FileDialog {
 	public:
