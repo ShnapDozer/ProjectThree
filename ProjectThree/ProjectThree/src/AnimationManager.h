@@ -16,7 +16,7 @@ namespace pt {
 		AnimationManager(ObjectPtr parent = nullptr);
 		AnimationManager(const std::string& name, ObjectPtr parent = nullptr);
 
-		void addAnimation(const std::string& name, const std::vector<std::string>& fileNames, float speed);
+		void addAnimation(const std::string& name, const std::vector<std::string>& fileNames, float speed = 100);
 		void setAnimation(const std::string& name);
 		void setAnimationSpeed(const std::string& name, float speed);
 

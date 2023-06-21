@@ -4,20 +4,6 @@
 #include <chrono>
 #include <thread>
 
-#include "ImGui/imgui.h"
-#include "ImGui/imgui-sfml.h"
-
-
-
-
-void Common::PrintState(std::map<std::string, float> a)
-{
-	for (auto it = a.begin(); it != a.end(); ++it)
-	{
-		ImGui::Value(it->first.c_str(), it->second);
-	}
-}
-
 std::vector<std::string> Common::splitByChar(const std::string& text, char separator)
 {
 	StringList splitString;
@@ -32,21 +18,11 @@ std::vector<std::string> Common::splitByChar(const std::string& text, char separ
 	return splitString;
 }
 
-bool Common::checNameAnim(StringList animNames, std::string name)
-{
-	for (auto animName : animNames) {
-		if (animName == name) {
-			return true;
-		}
-	}
-	return false;
-}
-
 template<typename T>
-std::vector<std::string> Common::MapToString(std::map<std::string, T> a)
+StringList Common::map2StringList(std::unordered_map<std::string, T> data)
 {
-	std::vector <std::string> result;
-	for (auto it = a.begin(); it != a.end(); ++it) {
+	StringList result;
+	for (auto it : data) {
 		result.push_back(it->first);
 	}
 	return result;

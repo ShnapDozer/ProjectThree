@@ -22,6 +22,8 @@ namespace pt
 		void update(double time); 
 		void draw(sf::RenderTarget& Target);
 
+		std::vector<EntityPtr> getEntitys();
+
 		std::shared_ptr<Hero> getHero();
 		sf::Vector2f getHeroPosition() const;
 

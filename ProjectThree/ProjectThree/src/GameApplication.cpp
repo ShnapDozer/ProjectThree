@@ -122,7 +122,7 @@ namespace pt
 				_mainWindow->close();
 				break;
 			case sf::Event::Resized:
-
+				_mainWindow->getSize();
 				break;
 			case sf::Event::MouseWheelScrolled:
 				if (!_imWindowsManager->inFocus()) {

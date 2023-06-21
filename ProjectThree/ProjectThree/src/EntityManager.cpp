@@ -55,6 +55,11 @@ namespace pt
 		}
 	}
 
+	std::vector<EntityPtr> EntityManager::getEntitys()
+	{
+		return std::vector<EntityPtr>();
+	}
+
 	std::shared_ptr<Hero> EntityManager::getHero()
 	{
 		if (_hero == nullptr) {

@@ -27,6 +27,12 @@
     <Filter Include="include\Managers">
       <UniqueIdentifier>{2eb57efe-1e48-4c0f-a3a2-35b1b0a8815b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\ImWindows">
+      <UniqueIdentifier>{f9af154a-22c5-41ff-b5c9-fc5f1dbadccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ImWindows">
+      <UniqueIdentifier>{0054ec4a-9474-461d-b546-fbbbd94ce65c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -113,8 +119,14 @@
     <ClCompile Include="src\ImWindowFactory.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\MainWindow.cpp">
+      <Filter>src\ImWindows</Filter>
+    </ClCompile>
     <ClCompile Include="src\ImWindow.cpp">
-      <Filter>src</Filter>
+      <Filter>src\ImWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AddAnimationWindow.cpp">
+      <Filter>src\ImWindows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,14 +190,20 @@
     <ClInclude Include="src\InputController.h">
       <Filter>include\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\ImWindowFactory.h">
+    <ClInclude Include="src\Defines.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="src\ImWindow.h">
+      <Filter>include\ImWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImWindowFactory.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="src\Defines.h">
-      <Filter>include</Filter>
+    <ClInclude Include="src\MainWindow.h">
+      <Filter>include\ImWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AddAnimationWindow.h">
+      <Filter>include\ImWindows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

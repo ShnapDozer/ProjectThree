@@ -60,6 +60,7 @@ namespace pt
 	void ImWindowManager::update(sf::Time elapsedTime)
 	{
 		auto window = GameApplication::getRenderWindow();
+
 		ImGui::SFML::Update(*window, elapsedTime);
 		focus = ImGui::GetIO().WantCaptureMouse;
 	}

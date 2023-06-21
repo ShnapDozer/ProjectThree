@@ -176,6 +176,7 @@
     <ClCompile Include="SourceLib\TinyXML\tinyxml.cpp" />
     <ClCompile Include="SourceLib\TinyXML\tinyxmlerror.cpp" />
     <ClCompile Include="SourceLib\TinyXML\tinyxmlparser.cpp" />
+    <ClCompile Include="src\AddAnimationWindow.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\AnimationManager.cpp" />
     <ClCompile Include="src\Common.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="src\ImWindow.cpp" />
     <ClCompile Include="src\InputController.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
+    <ClCompile Include="src\MainWindow.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\LoadingManager.cpp" />
     <ClCompile Include="src\Settings.cpp" />
@@ -199,6 +201,7 @@
     <ClInclude Include="SourceLib\TinyXML2\tinyxml2.h" />
     <ClInclude Include="SourceLib\TinyXML\tinystr.h" />
     <ClInclude Include="SourceLib\TinyXML\tinyxml.h" />
+    <ClInclude Include="src\AddAnimationWindow.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\AnimationManager.h" />
     <ClInclude Include="src\Common.h" />
@@ -212,6 +215,7 @@
     <ClInclude Include="src\ImWindow.h" />
     <ClInclude Include="src\InputController.h" />
     <ClInclude Include="src\LevelManager.h" />
+    <ClInclude Include="src\MainWindow.h" />
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\Timer.h" />

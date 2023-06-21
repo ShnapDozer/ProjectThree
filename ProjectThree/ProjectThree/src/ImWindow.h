@@ -7,20 +7,23 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Defines.h"
 #include "Object.h"
+
 
 namespace pt
 {
-	class ImWindow
+	class ImWindow : public Object
 	{
 	public:
 
-		ImWindow(size_t id, const std::string& name, const ImVec2& size, const ImVec2& position);
+		ImWindow(size_t id, const std::string& name, const ImVec2& size, const ImVec2& position, ObjectPtr parent = nullptr);
 		virtual ~ImWindow() {}
 		
 		void show();
 		void minimize();
 
+		virtual void resizeEvent(sf::Vector2u newWindowSize) {};
 		virtual void inWork() = 0;
 
 	protected:
@@ -31,12 +34,7 @@ namespace pt
 		ImVec2 _windowPosition;
 	};
 
-	class MainWindow : public ImWindow
-	{
-	public:
-		MainWindow(size_t id, const std::string& name, const ImVec2& size, const ImVec2& position);
-		void inWork() override;
-	};
+
 
 	//class A_Create_window : public ImWindow
 	//{

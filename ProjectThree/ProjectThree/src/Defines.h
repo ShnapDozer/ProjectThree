@@ -3,6 +3,7 @@
 #include <memory>
 
 #define StringList std::vector <std::string>
+#define ConstStringRef (const std::string&)
 
 #define RenderWindowPtr std::shared_ptr<sf::RenderWindow>
 #define InputControllerPtr std::shared_ptr<InputController>
@@ -18,3 +19,4 @@
 #define ImWindowsManagerPtr std::shared_ptr<ImWindowManager>
 
 #define AnimationManagersMapPtr  std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<AnimationManager>>>
+
