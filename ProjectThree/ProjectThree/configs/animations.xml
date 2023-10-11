@@ -1,0 +1,14 @@
+<AnimationManagers>
+    <Hero DefaultAnimation="Walk">
+        <Walk Speed="55">
+            <framePath1>Data/Animation/H1.png</framePath1>
+            <framePath2>Data/Animation/H2.png</framePath2>
+            <framePath3>Data/Animation/H3.png</framePath3>
+            <framePath4>Data/Animation/H4.png</framePath4>
+            <framePath5>Data/Animation/H5.png</framePath5>
+            <framePath6>Data/Animation/H6.png</framePath6>
+            <framePath7>Data/Animation/H7.png</framePath7>
+            <framePath8>Data/Animation/H8.png</framePath8>
+        </Walk>
+    </Hero>
+</AnimationManagers>

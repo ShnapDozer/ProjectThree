@@ -90,6 +90,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)\SourceLib\SFML\SFML 32\include;$(ProjectDir)\SourceLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,7 +165,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Scripts_Mg.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SourceLib\ImGui\imgui-SFML.cpp" />
     <ClCompile Include="SourceLib\ImGui\imgui.cpp" />
@@ -176,26 +176,52 @@
     <ClCompile Include="SourceLib\TinyXML\tinyxml.cpp" />
     <ClCompile Include="SourceLib\TinyXML\tinyxmlerror.cpp" />
     <ClCompile Include="SourceLib\TinyXML\tinyxmlparser.cpp" />
-    <ClCompile Include="src\Anim.cpp" />
-    <ClCompile Include="src\Entity_Mg.cpp" />
+    <ClCompile Include="src\AddAnimationWindow.cpp" />
+    <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\AnimationManager.cpp" />
+    <ClCompile Include="src\Common.cpp" />
+    <ClCompile Include="src\EntityFactory.cpp" />
+    <ClCompile Include="src\EntityManager.cpp" />
     <ClCompile Include="src\Explover.cpp" />
-    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\FileDialog.cpp" />
+    <ClCompile Include="src\GameApplication.cpp" />
     <ClCompile Include="src\Entity.cpp" />
-    <ClCompile Include="src\ImGui_Mg.cpp" />
+    <ClCompile Include="src\ImWindow.cpp" />
+    <ClCompile Include="src\InputController.cpp" />
+    <ClCompile Include="src\LevelManager.cpp" />
+    <ClCompile Include="src\MainWindow.cpp" />
+    <ClCompile Include="src\Object.cpp" />
+    <ClCompile Include="src\LoadingManager.cpp" />
+    <ClCompile Include="src\Settings.cpp" />
+    <ClCompile Include="src\ImWindowFactory.cpp" />
+    <ClCompile Include="src\ImWindowManager.cpp" />
     <ClCompile Include="src\TmxLevel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceLib\TinyXML2\tinyxml2.h" />
     <ClInclude Include="SourceLib\TinyXML\tinystr.h" />
     <ClInclude Include="SourceLib\TinyXML\tinyxml.h" />
-    <ClInclude Include="src\Anim.h" />
-    <ClInclude Include="src\Entity_Mg.h" />
+    <ClInclude Include="src\AddAnimationWindow.h" />
+    <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\AnimationManager.h" />
+    <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\Defines.h" />
+    <ClInclude Include="src\EntityFactory.h" />
+    <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\Explover.h" />
-    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\FileDialog.h" />
+    <ClInclude Include="src\GameApplication.h" />
     <ClInclude Include="src\Entity.h" />
-    <ClInclude Include="src\ImGui_Mg.h" />
-    <ClInclude Include="src\Script.h" />
-    <ClInclude Include="src\Scripts_Mg.h" />
+    <ClInclude Include="src\ImWindow.h" />
+    <ClInclude Include="src\InputController.h" />
+    <ClInclude Include="src\LevelManager.h" />
+    <ClInclude Include="src\MainWindow.h" />
+    <ClInclude Include="src\Object.h" />
+    <ClInclude Include="src\Settings.h" />
+    <ClInclude Include="src\Timer.h" />
+    <ClInclude Include="src\ImWindowFactory.h" />
+    <ClInclude Include="src\ImWindowManager.h" />
+    <ClInclude Include="src\LoadingManager.h" />
     <ClInclude Include="src\TmxLevel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

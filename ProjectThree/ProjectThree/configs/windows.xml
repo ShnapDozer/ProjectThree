@@ -1,0 +1,4 @@
+<Windows>
+    <MainWindow Name="MainWindow" PossitionX="100" PossitionY="100" Width="200" Height="200"/>
+    <AddAnimation Name="AddAnimation" PossitionX="100" PossitionY="100" Width="200" Height="200"/>
+</Windows>

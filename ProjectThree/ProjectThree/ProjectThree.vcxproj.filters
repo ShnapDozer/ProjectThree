@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Файлы заголовков">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Файлы ресурсов">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -20,6 +16,22 @@
     </Filter>
     <Filter Include="TMX2">
       <UniqueIdentifier>{4af800f0-fb1b-4028-8942-a067bf34138b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Managers">
+      <UniqueIdentifier>{9f73aee0-0074-413b-b60d-aac81ae87545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\Managers">
+      <UniqueIdentifier>{2eb57efe-1e48-4c0f-a3a2-35b1b0a8815b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\ImWindows">
+      <UniqueIdentifier>{f9af154a-22c5-41ff-b5c9-fc5f1dbadccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ImWindows">
+      <UniqueIdentifier>{0054ec4a-9474-461d-b546-fbbbd94ce65c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,7 +50,7 @@
     <ClCompile Include="SourceLib\TinyXML\tinystr.cpp">
       <Filter>TMX</Filter>
     </ClCompile>
-    <ClCompile Include="src\Anim.cpp">
+    <ClCompile Include="src\Animation.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Explover.cpp">
@@ -65,20 +77,56 @@
     <ClCompile Include="SourceLib\TinyXML2\tinyxml2.cpp">
       <Filter>TMX2</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ImGui_Mg.cpp">
+    <ClCompile Include="src\GameApplication.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Entity.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Entity_Mg.cpp">
+    <ClCompile Include="src\FileDialog.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts_Mg.cpp">
+    <ClCompile Include="src\Object.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Settings.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Common.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityFactory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AnimationManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InputController.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LoadingManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImWindowManager.cpp">
+      <Filter>src\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImWindowFactory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainWindow.cpp">
+      <Filter>src\ImWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImWindow.cpp">
+      <Filter>src\ImWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AddAnimationWindow.cpp">
+      <Filter>src\ImWindows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,35 +136,74 @@
     <ClInclude Include="SourceLib\TinyXML\tinystr.h">
       <Filter>TMX</Filter>
     </ClInclude>
-    <ClInclude Include="src\Anim.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\Animation.h">
+      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="src\Explover.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="src\TmxLevel.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="SourceLib\TinyXML2\tinyxml2.h">
       <Filter>TMX2</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ImGui_Mg.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\GameApplication.h">
+      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="src\Entity.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="src\Entity_Mg.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\FileDialog.h">
+      <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scripts_Mg.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\Object.h">
+      <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="src\Script.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="src\Common.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Settings.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Timer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityFactory.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AnimationManager.h">
+      <Filter>include\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityManager.h">
+      <Filter>include\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LevelManager.h">
+      <Filter>include\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LoadingManager.h">
+      <Filter>include\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImWindowManager.h">
+      <Filter>include\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputController.h">
+      <Filter>include\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Defines.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImWindow.h">
+      <Filter>include\ImWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ImWindowFactory.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainWindow.h">
+      <Filter>include\ImWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AddAnimationWindow.h">
+      <Filter>include\ImWindows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
