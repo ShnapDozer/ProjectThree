@@ -9817,12 +9817,12 @@ void ImGui::ShowMetricsWindow(bool* p_open)
             ImGui::TreePop();
         }
 
-        static void NodeWindows(ImVector<ImGuiWindow*>& windows, const char* label)
+        static void NodeWindows(ImVector<ImGuiWindow*>& m_windows, const char* label)
         {
-            if (!ImGui::TreeNode(label, "%s (%d)", label, windows.Size))
+            if (!ImGui::TreeNode(label, "%s (%d)", label, m_windows.Size))
                 return;
-            for (int i = 0; i < windows.Size; i++)
-                Funcs::NodeWindow(windows[i], "Window");
+            for (int i = 0; i < m_windows.Size; i++)
+                Funcs::NodeWindow(m_windows[i], "Window");
             ImGui::TreePop();
         }
 

@@ -29,7 +29,7 @@ namespace pt
 
 	private:
 
-		HeroPtr _hero;
-		std::vector<EntityPtr> _entitys;
+		HeroPtr m_hero;
+		std::vector<EntityPtr> m_entitys;
 	};
 }

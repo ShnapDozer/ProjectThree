@@ -17,7 +17,6 @@ namespace pt
 		void processEvent(const sf::Event& event);
 
 		void update(sf::Time elapsedTime);
-		void work();
 		void draw();
 
 		bool inFocus();
@@ -26,9 +25,9 @@ namespace pt
 		void closeWindow(size_t id);
 
 	private:
-		bool focus;
-		static size_t _id;
+		bool m_focus;
+		static size_t m_id;
 
-		std::unordered_map<size_t, ImWindowPtr> windows;
+		std::unordered_map<size_t, ImWindowPtr> m_windows;
 	};
 }

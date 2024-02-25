@@ -31,9 +31,8 @@ namespace pt
 		void processArguments(int argc, char* argv[]);
 		int run();
 
-
-		static std::variant<int, double, std::string> getConstant(const std::string& key);
-		static void setConstant(const std::string& key, std::variant<int, double, std::string> value);
+		static GameAppParameter getParameter(const std::string& key);
+		static void setParameter(const std::string& key, GameAppParameter value);
 
 		static RenderWindowPtr getRenderWindow();
 		static ImWindowsManagerPtr getImWindowsManager();
@@ -47,9 +46,6 @@ namespace pt
 		static AnimationManagersMapPtr getAnimationManagersMap();
 		
 	private:
-
-		void checkConfigFile();
-
 		void initRenderer();
 
 		void processEvents();
@@ -62,9 +58,9 @@ namespace pt
 
 		void hideConsolWindow();
 
-		static std::unordered_map<std::string, std::variant<int, double, std::string>> _constantMap;
+		static std::unordered_map<std::string, GameAppParameter> m_parametersMap;
 
-		static RenderWindowPtr _mainWindow;
+		static RenderWindowPtr m_mainWindow;
 		static ImWindowsManagerPtr _imWindowsManager;
 		static InputControllerPtr _inputController;
 		
@@ -74,16 +70,7 @@ namespace pt
 
 		std::shared_ptr<sf::View> _mainView;
 		
-		bool _windowFocus;
-		
 		sf::Clock _clock;
-		Timer<GameApplication> _updateConfigTimer;
-
-		std::shared_ptr<Ex>       Anim_EX;
-		std::shared_ptr<Ex> Iso_Levels_EX;
-		std::shared_ptr<Ex> Hex_Levels_EX;
-		std::shared_ptr<Ex> Ort_Levels_EX;
-		std::shared_ptr<Ex>    Scripts_EX;
 	};
 }
 

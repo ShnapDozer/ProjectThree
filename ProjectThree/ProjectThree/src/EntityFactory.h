@@ -13,7 +13,11 @@ namespace pt {
 	class EntityFactory : public Object
 	{
 	public:
-		static EntityPtr createEntity(const std::string& type, const std::string& name, sf::Vector2f possition);
+		static EntityPtr createEntity(
+			  const std::string& type
+			, const std::string& name
+			, sf::Vector2f possition
+		);
 	};
 }
 

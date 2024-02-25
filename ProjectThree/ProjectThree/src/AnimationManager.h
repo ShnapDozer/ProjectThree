@@ -26,10 +26,10 @@ namespace pt {
 		void draw(sf::RenderTarget& target, const sf::Vector2f& possition = { 0,0 }, float angle = 0);
 
 	private:
-		std::string _name;
-		sf::Sprite _sprite;
-		std::string _currentAnimation;
-		std::unordered_map<std::string, Animation> _animMap;
+		std::string m_name;
+		sf::Sprite m_sprite;
+		std::string m_currentAnimation;
+		std::unordered_map<std::string, Animation> m_animationsMap;
 	};
 }
 

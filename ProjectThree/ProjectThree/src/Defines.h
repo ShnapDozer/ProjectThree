@@ -18,5 +18,7 @@
 #define LevelManagerPtr std::shared_ptr<LevelManager>
 #define ImWindowsManagerPtr std::shared_ptr<ImWindowManager>
 
+#define GameAppParameter std::variant<bool, int, float, double, std::string>
+
 #define AnimationManagersMapPtr  std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<AnimationManager>>>
 

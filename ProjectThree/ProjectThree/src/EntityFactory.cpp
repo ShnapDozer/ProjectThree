@@ -2,20 +2,25 @@
 
 #include "GameApplication.h"
 
-EntityPtr pt::EntityFactory::createEntity(const std::string& type, const std::string& name, sf::Vector2f possition)
-{
-	auto animationManagersMap = GameApplication::getAnimationManagersMap();
-
+EntityPtr pt::EntityFactory::createEntity(
+	  const std::string& type
+	, const std::string& name
+	, sf::Vector2f possition
+) {
 	if (type == "Hero") {
 		
+		auto animationManagersMap = GameApplication::getAnimationManagersMap();
 		auto hero = std::make_shared<Hero>(name, possition);
-		if (animationManagersMap->find(type) != animationManagersMap->end()) {
+
+		if (animationManagersMap->find(type) != animationManagersMap->end()) 
+		{
 			hero->setAnimManager(*animationManagersMap->at(type));
 		}
 
 		return hero;
 	}
-	else if (type == "NPC") {
+	else if (type == "NPC") 
+	{
 		return std::make_shared<NPC>(name, possition);
 	}
 

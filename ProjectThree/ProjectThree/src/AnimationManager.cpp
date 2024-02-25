@@ -5,56 +5,56 @@ namespace pt {
 	{
 
 	}
-	AnimationManager::AnimationManager(const std::string& name, ObjectPtr parent) : _name(name), Object(parent)
+	AnimationManager::AnimationManager(const std::string& name, ObjectPtr parent) : m_name(name), Object(parent)
 	{ 
 		 
 	}
 
 	void AnimationManager::addAnimation(const std::string& name, const std::vector<std::string>& fileNames, float speed)
 	{
-		_animMap[name] = Animation(fileNames, speed);
-		_currentAnimation = name;
+		m_animationsMap[name] = Animation(fileNames, speed);
+		m_currentAnimation = name;
 	}
 
 	void AnimationManager::update(float time)
 	{
-		if (_animMap.find(_currentAnimation) == _animMap.end()) {
+		if (m_animationsMap.find(m_currentAnimation) == m_animationsMap.end()) {
 			return;
 		}
-		_animMap[_currentAnimation].update(time);
+		m_animationsMap[m_currentAnimation].update(time);
 	}
 
 	void AnimationManager::setAnimation(const std::string& name)
 	{
-		_currentAnimation = name;
+		m_currentAnimation = name;
 	}
 
 	void AnimationManager::setAnimationSpeed(const std::string& name, float speed)
 	{
-		_animMap[name].setSpeed(speed);
+		m_animationsMap[name].setSpeed(speed);
 	}
 
 	void AnimationManager::draw(sf::RenderTarget& target, const sf::Vector2f& possition, float angle)
 	{
 		
-		if (_animMap.find(_currentAnimation) == _animMap.end()) {
+		if (m_animationsMap.find(m_currentAnimation) == m_animationsMap.end()) {
 			return;
 		}
 
-		_sprite.setTexture(*_animMap[_currentAnimation].getCurrentTexture());
-		_sprite.setPosition(possition);
+		m_sprite.setTexture(*m_animationsMap[m_currentAnimation].getCurrentTexture());
+		m_sprite.setPosition(possition);
 
 		const sf::FloatRect viewportRect = target.getView().getViewport();
-		if (viewportRect.intersects(_sprite.getLocalBounds()))
+		if (viewportRect.intersects(m_sprite.getLocalBounds()))
 		{
-			_sprite.setOrigin(_sprite.getGlobalBounds().height / 2, _sprite.getGlobalBounds().width / 2);
-			_sprite.setRotation(angle);
-			target.draw(_sprite);
+			m_sprite.setOrigin(m_sprite.getGlobalBounds().height / 2, m_sprite.getGlobalBounds().width / 2);
+			m_sprite.setRotation(angle);
+			target.draw(m_sprite);
 		}
 	}
 
 	sf::FloatRect AnimationManager::getSpriteRect() const 
 	{ 
-		return _sprite.getGlobalBounds(); 
+		return m_sprite.getGlobalBounds(); 
 	}
 }

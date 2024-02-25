@@ -108,29 +108,29 @@ namespace pt
 			vector = (pow(mousPosition.y - _position.y, 2)) + (pow(mousPosition.x - _position.x, 2));
 
 			if (false) {
-				State = state::up_left;
+				State = PositionState::up_left;
 
 			} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-				State = state::up_right;
+				State = PositionState::up_right;
 
 			} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-				State = state::down_left;
+				State = PositionState::down_left;
 
 			} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-				State = state::down_right;
+				State = PositionState::down_right;
 
 			} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-				State = state::left;
+				State = PositionState::left;
 			} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-				State = state::right;
+				State = PositionState::right;
 
 			} else if (rotation_grad <= -80 && rotation_grad >= -100) {
-				State = state::up;
+				State = PositionState::up;
 
 			} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-				State = state::down;
+				State = PositionState::down;
 
-			} else State = state::stay;
+			} else State = PositionState::stay;
 
 			if (vector < 10000) {
 				dx = 0.05 * std::cos(std::atan2(mousPosition.y - _position.y, mousPosition.x - _position.x));

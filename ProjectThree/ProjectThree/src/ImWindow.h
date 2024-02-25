@@ -28,7 +28,7 @@ namespace pt
 
 	protected:
 		bool _show;
-		size_t _id;
+		size_t m_id;
 		std::string _name;
 		ImVec2 _windowSize;
 		ImVec2 _windowPosition;

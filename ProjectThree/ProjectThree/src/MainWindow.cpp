@@ -27,9 +27,9 @@ void pt::MainWindow::inWork()
 			//PrintState(Hero_ptr->GetAllState());
 		}
 
-		if (ImGui::CollapsingHeader("Anim Manager"))
+		if (ImGui::CollapsingHeader("Animation manager"))
 		{
-			GameApplication::getEntityManager()->getEntitysMap();
+			/*GameApplication::getEntityManager()->getEntitysMap();
 			Common::map2StringList()
 			auto animManagerMap = Entity::GetMembers();
 			StringList animManagerNames(Common::map2StringList(animManagerMap));
@@ -56,10 +56,10 @@ void pt::MainWindow::inWork()
 						Entity::GetMembers()[AM[ChoiceOne]]->setAnimSpeed(animNames[ChoiceTwo], Speed);
 					}
 				}
-			}
+			}*/
 
 
-		//}
+		}
 		if (ImGui::CollapsingHeader("Level Manager"))//основное меню
 		{
 			/*std::vector <std::string> LM(Common::MapToString(LM_ptr->Lvl_Get_Map()));

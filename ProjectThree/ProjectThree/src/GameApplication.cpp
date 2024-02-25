@@ -29,7 +29,7 @@
 
 namespace pt
 {
-	RenderWindowPtr GameApplication::_mainWindow = nullptr;
+	RenderWindowPtr GameApplication::m_mainWindow = nullptr;
 	ImWindowsManagerPtr GameApplication::_imWindowsManager = nullptr;
 	InputControllerPtr GameApplication::_inputController = nullptr;
 	
@@ -38,13 +38,18 @@ namespace pt
 
 	AnimationManagersMapPtr GameApplication::_animationManagers = nullptr;
 
-	std::unordered_map<std::string, std::variant<int, double, std::string>>  GameApplication::_constantMap;
+	std::unordered_map<std::string, GameAppParameter>  GameApplication::m_parametersMap;
 
-	GameApplication::GameApplication(int argc, char* argv[]) : _windowFocus(true), Object()
+	GameApplication::GameApplication(int argc, char* argv[]) 
+		: Object()
 	{
-		this->setConstant("AppConfig", "configs/applicationConfig.xml");
-		this->setConstant("AnimationsConfig", "configs/animations.xml");
-		this->setConstant("WindowsConfig", "configs/windows.xml");
+		this->setParameter("appConfig",				std::string{"configs/applicationConfig.xml"});
+		this->setParameter("animationsConfig",		std::string{"configs/animations.xml"});
+		this->setParameter("windowsConfig",			std::string{"configs/windows.xml"});
+		this->setParameter("zoomOut",				0.75f);
+		this->setParameter("zoomIn",				1.25f);
+		this->setParameter("gameWindowInFocus",		true);
+		this->setParameter("timeDiv",				double{ 800 });
 
 		processArguments(argc, argv);
 
@@ -55,12 +60,7 @@ namespace pt
 		_levelManager = std::make_shared<LevelManager>();
 		_levelManager->addLevel("01", "Data/Levels/Isometric/01.tmx");
 
-		Iso_Levels_EX = std::make_shared<Ex>("\\Data\\Levels\\Isometric\\*", "Data/Levels/Isometric/");
-		Hex_Levels_EX = std::make_shared<Ex>("\\Data\\Levels\\Hex\\*", "Data/Levels/Hex/");
-		Ort_Levels_EX = std::make_shared<Ex>("\\Data\\Levels\\Ortogonal\\*", "Data/Levels/Ortogonal/");
-		Scripts_EX = std::make_shared<Ex>("\\Data\\Scripts\\*", "Data/Scripts/");
-
-		const std::string animationConfigPath = std::get<std::string>(getConstant("AnimationsConfig"));
+		const std::string animationConfigPath = std::get<std::string>(getParameter("animationsConfig"));
 		pt::LoadingManager::loadAnimation(animationConfigPath);
 
 		_inputController = std::make_shared<InputController>();
@@ -70,8 +70,6 @@ namespace pt
 		_imWindowsManager = std::make_shared<ImWindowManager>();
 		_imWindowsManager->showWindow("MainWindow");
 
-		_updateConfigTimer.start(1000, this, &GameApplication::checkConfigFile);
-
 		srand(time(NULL));
 	}
 
@@ -80,31 +78,26 @@ namespace pt
 
 	}
 
-	void GameApplication::checkConfigFile()
-	{
-		std::cout << "Work!!!";
-	}
-
 	void GameApplication::initRenderer()
 	{
 		Settings configFile;
-		const std::string appConfigPath = std::get<std::string>(getConstant("AppConfig"));
+		const std::string appConfigPath = std::get<std::string>(getParameter("appConfig"));
 		configFile.openFile(appConfigPath);
 
 		sf::VideoMode mode;
 		mode.height = configFile.getIntAttribute("mainWindow", "VideoModeHeight");
 		mode.width = configFile.getIntAttribute("mainWindow", "VideoModeWidth");
 
-		this->setConstant("VideoModeHeight", (int)mode.height);
-		this->setConstant("VideoModeWidth", (int)mode.width);
+		this->setParameter("VideoModeHeight", (int)mode.height);
+		this->setParameter("VideoModeWidth", (int)mode.width);
 
-		_mainWindow = std::make_shared<sf::RenderWindow>(mode, "ProjectThree");
-		_mainWindow->setVerticalSyncEnabled(true);
-		_mainWindow->setKeyRepeatEnabled(false);
+		m_mainWindow = std::make_shared<sf::RenderWindow>(mode, "ProjectThree");
+		m_mainWindow->setVerticalSyncEnabled(true);
+		m_mainWindow->setKeyRepeatEnabled(false);
 
 		sf::Image windowIcon;
 		windowIcon.loadFromFile("Data/icon.png");
-		_mainWindow->setIcon(32, 32, windowIcon.getPixelsPtr());
+		m_mainWindow->setIcon(32, 32, windowIcon.getPixelsPtr());
 
 		_mainView = std::make_shared<sf::View>();
 		_mainView->setCenter(0, 0);
@@ -113,28 +106,28 @@ namespace pt
 	void GameApplication::processEvents()
 	{
 		sf::Event event;
-		while (_mainWindow->pollEvent(event))
+		while (m_mainWindow->pollEvent(event))
 		{
 			_imWindowsManager->processEvent(event);
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				_mainWindow->close();
+				m_mainWindow->close();
 				break;
 			case sf::Event::Resized:
-				_mainWindow->getSize();
+				m_mainWindow->getSize();
 				break;
 			case sf::Event::MouseWheelScrolled:
 				if (!_imWindowsManager->inFocus()) {
-					if (event.mouseWheelScroll.delta > 0) { _mainView->zoom(0.75); }
-					if (event.mouseWheelScroll.delta < 0) { _mainView->zoom(1.35); }
+					if (event.mouseWheelScroll.delta > 0) { _mainView->zoom(std::get<float>(getParameter("zoomOut"))); }
+					if (event.mouseWheelScroll.delta < 0) { _mainView->zoom(std::get<float>(getParameter("zoomIn"))); }
 				}
 				break;
 			case sf::Event::LostFocus:
-				_windowFocus = 0;
+				setParameter("gameWindowInFocus", false);
 				break;
 			case sf::Event::GainedFocus:
-				_windowFocus = 1;
+				setParameter("gameWindowInFocus", true);
 				break;
 
 			}
@@ -144,28 +137,27 @@ namespace pt
 	void GameApplication::update()
 	{
 		sf::Time time = _clock.restart();
-		double elapsedTime = time.asMicroseconds() / 800;
+		double elapsedTime = time.asMicroseconds() / std::get<double>(this->getParameter("timeDiv"));
 
 		this->processEvents();
 
-		_inputController->update();
-
-		if (_windowFocus) {
-			_entityManager->update(elapsedTime);
+		if (std::get<bool>(this->getParameter("gameWindowInFocus")))
+		{
+			_inputController->update();
 			_imWindowsManager->update(time);
-			_imWindowsManager->work();
+			_entityManager->update(elapsedTime);
 		}
 	}
 
 	void GameApplication::draw()
 	{
-		sf::RenderTarget& target = *_mainWindow;
+		sf::RenderTarget& target = *m_mainWindow;
 
 		_mainView->setCenter(_entityManager->getHeroPosition());
 
-		_mainWindow->clear();
+		m_mainWindow->clear();
 
-		_mainWindow->setView(*_mainView);
+		m_mainWindow->setView(*_mainView);
 
 		_levelManager->draw(target);
 
@@ -176,7 +168,7 @@ namespace pt
 		_entityManager->draw(target);
 		_imWindowsManager->draw();
 
-		_mainWindow->display();
+		m_mainWindow->display();
 	}
 
 	void GameApplication::hideConsolWindow()
@@ -189,7 +181,7 @@ namespace pt
 
 	void GameApplication::gameLoop()
 	{
-		while (_mainWindow->isOpen())
+		while (m_mainWindow->isOpen())
 		{
 			update();
 			draw();
@@ -209,24 +201,24 @@ namespace pt
 		return 0;
 	}
 
-	std::variant<int, double, std::string> GameApplication::getConstant(const std::string& key)
+	GameAppParameter GameApplication::getParameter(const std::string& key)
 	{
-		auto constant = _constantMap.find(key);
-		if (constant != _constantMap.end()) {
+		auto constant = m_parametersMap.find(key);
+		if (constant != m_parametersMap.end()) {
 			return constant->second;
 		}
 
-		return std::variant<int, double, std::string>();
+		return GameAppParameter();
 	}
 
-	void GameApplication::setConstant(const std::string& key, std::variant<int, double, std::string> value)
+	void GameApplication::setParameter(const std::string& key, GameAppParameter value)
 	{
-		_constantMap[key] = value;
+		m_parametersMap[key] = value;
 	}
 
 	RenderWindowPtr GameApplication::getRenderWindow()
 	{
-		return _mainWindow;
+		return m_mainWindow;
 	}
 
 	LevelManagerPtr GameApplication::getLevelManager()

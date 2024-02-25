@@ -8,7 +8,7 @@
 
 namespace pt
 {
-	size_t ImWindowManager::_id = 0;
+	size_t ImWindowManager::m_id = 0;
 
 	ImWindowManager::ImWindowManager(ObjectPtr parent)
 		: Object(parent)
@@ -19,13 +19,13 @@ namespace pt
 
 	bool ImWindowManager::inFocus()
 	{
-		return  focus;
+		return  m_focus;
 	}
 
 	void ImWindowManager::showWindow(const std::string & windowName)
 	{
 		Settings windowsConfig;
-		const std::string windowsConfigPath = std::get<std::string>(GameApplication::getConstant("WindowsConfig"));
+		const std::string windowsConfigPath = std::get<std::string>(GameApplication::getParameter("windowsConfig"));
 
 		if (windowsConfig.openFile(windowsConfigPath)) {
 
@@ -38,10 +38,10 @@ namespace pt
 					const int width = windowsConfig.getDoubleAttribute(windowType, "Width");
 					const int height = windowsConfig.getDoubleAttribute(windowType, "Height");
 
-					auto imWindow = ImWindowFactory::createWindow(_id++, windowType, name, positionX, positionY, width, height);
+					auto imWindow = ImWindowFactory::createWindow(m_id++, windowType, name, positionX, positionY, width, height);
 
 					if (imWindow != nullptr) {
-						windows[_id] = imWindow;
+						m_windows[m_id] = imWindow;
 					}
 				}
 
@@ -54,7 +54,7 @@ namespace pt
 
 	void ImWindowManager::closeWindow(size_t id)
 	{
-		windows.erase(id);
+		m_windows.erase(id);
 	}
 
 	void ImWindowManager::update(sf::Time elapsedTime)
@@ -62,20 +62,19 @@ namespace pt
 		auto window = GameApplication::getRenderWindow();
 
 		ImGui::SFML::Update(*window, elapsedTime);
-		focus = ImGui::GetIO().WantCaptureMouse;
+		m_focus = ImGui::GetIO().WantCaptureMouse;
+
+		ImGui::StyleColorsLight();
+	
+		for (auto window : m_windows) 
+		{
+			window.second->inWork();
+		}
 	}
 
 	void ImWindowManager::processEvent(const sf::Event& event)
 	{
 		ImGui::SFML::ProcessEvent(event);
-	}
-
-	void ImWindowManager::work()
-	{
-		ImGui::StyleColorsLight();
-		for (auto window : windows) {
-			window.second->inWork();
-		}
 	}
 
 	void ImWindowManager::draw() { 

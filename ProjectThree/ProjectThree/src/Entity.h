@@ -12,7 +12,7 @@
 
 namespace pt
 {
-	enum class state
+	enum class PositionState
 	{
 		left,
 		right,
@@ -88,7 +88,7 @@ namespace pt
 		float rotation_rad;
 		float rotation_grad;
 
-		state State = state::stay;
+		PositionState State = PositionState::stay;
 	};
 
 	class NPC : public Entity
@@ -106,6 +106,6 @@ namespace pt
 
 		bool interaction;
 
-		state State = state::stay;
+		PositionState State = PositionState::stay;
 	};
 }

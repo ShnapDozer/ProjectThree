@@ -13,7 +13,7 @@ namespace pt
 {
 
 	ImWindow::ImWindow(size_t id, const std::string& name, const ImVec2& size, const ImVec2& position, ObjectPtr parent)
-		: _id(id), _name(name), _windowSize(size), _windowPosition(position), _show(true), Object(parent)
+		: m_id(id), _name(name), _windowSize(size), _windowPosition(position), _show(true), Object(parent)
 	{
 		
 	}

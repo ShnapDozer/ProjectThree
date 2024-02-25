@@ -16,15 +16,20 @@ namespace pt
 		auto entityObjects = levelManager->getGroupObjects("Entity");
 
 		for (auto &entityObject : entityObjects) {
-			auto entity = EntityFactory::createEntity(entityObject.type, entityObject.name, entityObject.possition);
+			
+			auto entity = EntityFactory::createEntity(
+				  entityObject.type
+				, entityObject.name
+				, entityObject.possition
+			);
 			
 			if (entity != nullptr) {
 				
 				if (entityObject.type == "Hero") {
-					_hero = std::static_pointer_cast<Hero>(entity);
-					_entitys.push_back(entity);
+					m_hero = std::static_pointer_cast<Hero>(entity);
+					m_entitys.push_back(entity);
 				} else {
-					_entitys.push_back(std::move(entity));
+					m_entitys.push_back(std::move(entity));
 				}
 			} else { 
 				std::cout << entityObject.name << " - bad object" << std::endl;
@@ -34,10 +39,11 @@ namespace pt
 
 	void EntityManager::update(double time)
 	{
-		_hero->update(time);
+		m_hero->update(time);
 
-		for (auto entity : _entitys) { 
-			if (entity != nullptr) {
+		for (auto entity : m_entitys) { 
+			if (entity != nullptr) 
+			{
 				entity->update(time);
 			}
 				
@@ -46,9 +52,9 @@ namespace pt
 
 	void EntityManager::draw(sf::RenderTarget& Target)
 	{
-		_hero->drawAnimation(Target);
+		m_hero->drawAnimation(Target);
 
-		for (auto entity : _entitys) {
+		for (auto entity : m_entitys) {
 			if (entity) {
 				entity->drawAnimation(Target);
 			}
@@ -62,19 +68,19 @@ namespace pt
 
 	std::shared_ptr<Hero> EntityManager::getHero()
 	{
-		if (_hero == nullptr) {
+		if (m_hero == nullptr) {
 			return std::shared_ptr<Hero>();
 		}
 
-		return _hero;
+		return m_hero;
 	}
 
 	sf::Vector2f EntityManager::getHeroPosition() const
 	{
-		if (_hero == nullptr) {
+		if (m_hero == nullptr) {
 			return{ 0.f,0.f };
 		}
 
-		return _hero->getPosition();		
+		return m_hero->getPosition();		
 	}
 }
