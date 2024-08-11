@@ -1,8 +1,8 @@
-#include "ImWindowManager.h"
+п»ї#include "ImWindowManager.h"
 
 #include "GameApplication.h"
-#include "Settings.h"
 #include "ImWindowFactory.h"
+#include "Settings.h"
 
 #include <iostream>
 
@@ -47,8 +47,9 @@ namespace pt
 
 			}
 		}
-		else {
-			// TODO: Логика ассертов, пока хз
+		else 
+		{
+			// TODO: Г‹Г®ГЈГЁГЄГ  Г Г±Г±ГҐГ°ГІГ®Гў, ГЇГ®ГЄГ  ГµГ§
 		}
 	}
 

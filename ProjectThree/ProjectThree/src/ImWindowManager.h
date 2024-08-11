@@ -3,7 +3,6 @@
 #include <unordered_map>
 
 #include "Defines.h"
-
 #include "ImWindow.h"
 #include "Object.h"
 
